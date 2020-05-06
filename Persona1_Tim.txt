@@ -1,0 +1,11 @@
+Persona 1:
+52, Weiblich, Ernährungsberaterin, 30000€ brutto/Jahr
+In besitz eines Android Tablets und eines Desktop PCs.
+Sehr geringe technische Kenntnisse. (Absuchen der GUI/Tastatur durch langsames abfahren mit dem Zeigefinger)
+Vorkenntnisse:
+Nutzt das tablet gelegentlich für Spiele oder das checken von E-Mails.
+Computer findet nur für das arbeiten in Word seltenen gebrauch.
+Ziel:
+Möchte mit der reinigungs Website den Zeitlichen Ablaufplan der verschiedenen Reinigungshelfer Steuern.
+
+Annahme: Das einrichten aller kompatiblen Geräte kann durch einscannen eines QR codes in der Anleitung o.Ä. der Reinigungshelfer geschehen.
