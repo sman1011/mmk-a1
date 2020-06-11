@@ -1,0 +1,7 @@
+yarn-error.log
+yarn.lock
+node_modules
+
+public/assets/bundle.js
+public/assets/bundle.js.map
+public/assets/bundle.css
