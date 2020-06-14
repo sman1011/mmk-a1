@@ -86,7 +86,12 @@ let mockData = {
             id: 12,
             name: "Garten",
             floor: 3
-        }
+        },
+	{
+	    id: 13,
+            name: "lawn",
+            floor: 3
+        },
     ],
     
     robots: [
@@ -184,6 +189,31 @@ let mockData = {
             currentMode: "parquet floor"
         }
 
-    ]
-    
+    ],
+
+    dates: [
+        {
+            id: 0,
+            name: "Cleaning Kitchen",
+	        startDate: "2020-06-14",
+	        repeat: "daily",
+            robot: 0,
+            room: 2,
+            begin: "12:00",
+            end: "13:00",
+            color: "red",
+        },
+        {
+            id: 1,
+            name: "mowing",
+	        startDate: "2020-06-14",
+	        endDate: "2020-11-01",
+	        repeat: "weekly",
+            robot: 1,
+            room: 4,
+            begin: "10:00",
+            end: "11:00",
+            color: "green",
+        },
+    ],
 };
