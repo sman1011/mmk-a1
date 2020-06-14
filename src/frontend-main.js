@@ -1,11 +1,15 @@
 import Vue from 'vue';
+import Vuetify from 'vuetify/lib'
+
+Vue.use(Vuetify)
 
 import App from './components/App.vue';
 
-export default function () {
-    const app = new Vue({
-        render: (h) => h(App),
-    });
+const vuetify = new Vuetify({});
 
-    app.$mount('#app');
-};
+const app = new Vue({
+    vuetify,
+    render: (h) => h(App),
+});
+
+app.$mount('#app');
