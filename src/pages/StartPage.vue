@@ -36,7 +36,7 @@ export default {
                      <v-btn class="ma-2" v-bind="attrs" v-on="on">quick cleaning</v-btn>
                     </template>
                     <v-list>
-                        <v-list-item v-for="room in $store.state.roomList" :key="i" @click="() => {}">
+                        <v-list-item v-for="(room, i) in $store.state.roomList" :key="i" @click="() => {}">
                             <v-list-item-title>{{ room.name }}</v-list-item-title>
                         </v-list-item>
                     </v-list>
