@@ -201,6 +201,40 @@ export class ApiMock{
         }
     }
 
+    getDateList(){
+        // GET /date
+        let date = this.data.dates.map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(dates)
+    }
+
+    getDate(dateId){
+        // GET /date/:dateId
+        let date = this.data.dates.filter(d => d.id === dateId).map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(date)
+    }
+
 }
 
 export class Api{
