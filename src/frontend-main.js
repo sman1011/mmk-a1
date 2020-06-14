@@ -1,10 +1,10 @@
 import Vue from 'vue';
 
 import Vuetify from 'vuetify/lib';
-Vue.use(Vuetify)
+Vue.use(Vuetify);
 
 import VueRouter from 'vue-router';
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 import { store } from './Store.js';
 
@@ -17,6 +17,7 @@ import RobotPage from './pages/RobotPage.vue';
 import NewRoomPage from './pages/NewRoomPage.vue';
 import NewRobotPage from './pages/NewRobotPage.vue';
 import NewFloorPage from './pages/NewFloorPage.vue';
+import TimeTable from "./pages/TimeTable.vue";
 
 const vuetify = new Vuetify({
     icons: {
@@ -36,11 +37,13 @@ const routes = [
     
     { path: '/robots/new',          component: NewRobotPage },
     { path: '/robots/:robot_id',    component: RobotPage },
-]
+
+    { path: '/timetable',           component: TimeTable },
+];
 
 const router = new VueRouter({
   routes
-})
+});
 
 const app = new Vue({
     vuetify,
