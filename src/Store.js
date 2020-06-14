@@ -54,6 +54,12 @@ let store = new Vuex.Store({
             });
         },
 
+        load_full_room_list({ commit }){
+            return api.getFullRoomList().then( data => {
+                commit('set_room_list', data)
+            });
+        },
+
         load_robot_list({ commit }){
             return api.getRobotList().then( data => {
                 commit('set_robot_list', data) 

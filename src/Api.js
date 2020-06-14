@@ -20,7 +20,13 @@ export class ApiMock{
         let floors = this.data.floors.map( (f) => ({ id: f.id, name: f.name }) );
         return this.apiCall(floors);
     }
-    
+
+    getFullRoomList(){
+        // GET /rooms
+        let rooms = this.data.rooms.map( (f) => ({ id: f.id, name: f.name }) );
+        return this.apiCall(rooms);
+    }
+
     getFloor(floorId){
         // GET /floors/:id
         if( floorId >= this.data.floors.length || floorId < 0 ){
@@ -35,7 +41,7 @@ export class ApiMock{
         let rooms = this.data.rooms.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
         return this.apiCall(rooms);
     }
-    
+
     getRoom(roomId){
         // GET /rooms/:id
         if( roomId >= this.data.rooms.length || roomId < 0 ){
