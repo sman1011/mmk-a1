@@ -1,9 +1,10 @@
 <script>
 import HelloWorld from './HelloWorld.vue';
+import { VBtn } from 'vuetify/lib';
 
 export default {
     name: "App",
-    components: { HelloWorld },
+    components: { HelloWorld, VBtn },
     
     props:{
     },
@@ -21,6 +22,7 @@ export default {
 <template>
     <div>
         <hello-world></hello-world>
+        <v-btn>Hello</v-btn>
     </div>
 </template>
 
