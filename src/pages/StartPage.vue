@@ -1,9 +1,8 @@
 <script>
-import { VBtn } from 'vuetify/lib';
 
 export default {
-    name: "App",
-    components: { VBtn },
+    name: "StartPage",
+    components: {  },
     
     props:{
     },
@@ -20,7 +19,9 @@ export default {
 
 <template>
     <div>
-        <router-view></router-view>
+        <ul>
+            <li><router-link to="/floors">Roboter und Räume Verwalten</router-link></li>
+        </ul>
     </div>
 </template>
 
