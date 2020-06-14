@@ -19,9 +19,11 @@ export default {
 </script>
 
 <template>
-    <div>
-        <router-view></router-view>
-    </div>
+    <v-app>
+        <div>
+            <router-view></router-view>
+        </div>
+    </v-app>
 </template>
 
 <style>
