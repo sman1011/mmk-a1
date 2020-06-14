@@ -19,9 +19,10 @@ export default {
 
 <template>
     <div>
-        <ul>
-            <li><router-link to="/floors">Roboter und Räume Verwalten</router-link></li>
-        </ul>
+        <v-btn to="/floors">robots and rooms</v-btn>
+        <v-btn to="/floors">timetables</v-btn>
+        <v-btn to="/floors">templates</v-btn>
+        <v-btn to="/floors">statistics</v-btn>
     </div>
 </template>
 
