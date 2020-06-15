@@ -72,6 +72,17 @@ export class ApiMock{
             return this.apiCall(this.data.robots[robotId]);
         }
     }
+    
+    patchRoom(room){
+        // PATCH /rooms/:id
+        let oldRoom = findById(this.data.rooms, room.id);
+        if( oldRoom === null ){
+            return this.apiCall({ message: "room not found", code: 404 }, true);
+        }else{
+            let newRoom = Object.assign(oldRoom, room);
+            return this.apiCall(newRoom);
+        }
+    }
 
 }
 
