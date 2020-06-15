@@ -208,11 +208,9 @@
                                     sDays = (begin.getTime() - stop.getTime()) / 86400000;
                                 }
                             }
-                            console.log(min.toISOString())
                             for(let i = 0; i <= sDays; i++) {
                                 let d = new Date();
                                 d.setDate(min.getDate() + i + 1); // +1 to fix time zone
-                                console.log()
 
                                 events.push({
                                     name: date.name,
@@ -224,6 +222,25 @@
                             }
                             break;
                         case "weekly":
+                            let sWeek = days / 7;
+                            if(stop !== undefined){
+                                if(stop.getTime() < max.getTime()) {
+                                    sWeek = (begin.getTime() - stop.getTime()) / 86400000 / 7;
+                                }
+                            }
+                            for(let i = 0; i <= sWeek; i++) {
+                                let d = new Date();
+                                d.setDate(min.getDate() + (i * 7) + 1); // +1 to fix time zone
+
+                                events.push({
+                                    name: date.name,
+                                    start: `${d.toISOString().split('T')[0]}T${date.begin}`,
+                                    end: `${d.toISOString().split('T')[0]}T${date.end}`,
+                                    color: date.color,
+                                    details: `Room: ${date.room} - Robot: ${date.robot}`
+                                })
+                            }
+                            break;
                         default:
                             events.push({
                                 name: date.name,
