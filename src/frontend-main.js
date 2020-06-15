@@ -12,6 +12,7 @@ import App from './components/App.vue';
 import FloorListPage from './pages/FloorListPage.vue';
 import FloorPage from './pages/FloorPage.vue';
 import StartPage from './pages/StartPage.vue';
+import RoomPage from './pages/RoomPage.vue';
 
 const vuetify = new Vuetify({});
 
@@ -19,6 +20,7 @@ const routes = [
     { path: '/',                    component: StartPage },
     { path: '/floors',              component: FloorListPage },
     { path: '/floors/:floor_id',    component: FloorPage },
+    { path: '/rooms/:room_id',      component: RoomPage },
 ]
 
 const router = new VueRouter({
