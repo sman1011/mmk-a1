@@ -19,6 +19,14 @@ let store = new Vuex.Store({
         room: {},
         robot: {},
     },
+    
+    getters: {
+        floorName: (state) => (floorId) => {
+            let floor = state.floorList.filter( f => f.id == floorId );
+            return floor.length > 0 ? floor[0].name : "";
+        }
+    },
+    
     mutations: {
         set_floor_list(state, data){
             state.floorList = data;
@@ -69,6 +77,18 @@ let store = new Vuex.Store({
         load_floor({ commit }, { floorId }){
             return api.getFloor(floorId).then( data => {
                 commit('set_floor', data) 
+            });
+        },
+        
+        load_room({ commit }, { roomId }){
+            return api.getRoom(roomId).then( data => {
+                commit('set_room', data) 
+            });
+        },
+        
+        update_room({ commit }, room){
+            return api.patchRoom(room).then( data => {
+                commit('set_room', data) 
             });
         },
         

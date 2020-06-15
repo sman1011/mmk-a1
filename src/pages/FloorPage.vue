@@ -40,7 +40,7 @@ export default {
                 v-for="room in $store.state.roomList"
             >
                 <router-link 
-                    v-bind:to="'/room/' + room.id.toString()"
+                    v-bind:to="'/rooms/' + room.id.toString()"
                 >
                     {{room.name}}
                 </router-link>
