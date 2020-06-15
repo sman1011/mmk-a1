@@ -1,6 +1,11 @@
 
 import { mockData } from './MockData.js'
 
+let findById = function(arr, id){
+    let r = arr.filter( x => x.id == id );
+    return r.length > 0 ? r[0] : null;
+}
+
 export class ApiMock{
     
     constructor(){
@@ -29,10 +34,11 @@ export class ApiMock{
 
     getFloor(floorId){
         // GET /floors/:id
-        if( floorId >= this.data.floors.length || floorId < 0 ){
+        let floor = findById(this.data.floors, floorId);
+        if( floor === null ){
             return this.apiCall({ message: "floor not found", code: 404 }, true);
         }else{
-            return this.apiCall(this.data.floors[floorId]);
+            return this.apiCall(floor);
         }
     }
     
@@ -44,10 +50,11 @@ export class ApiMock{
 
     getRoom(roomId){
         // GET /rooms/:id
-        if( roomId >= this.data.rooms.length || roomId < 0 ){
+        let room = findById(this.data.rooms, roomId);
+        if( room === null ){
             return this.apiCall({ message: "room not found", code: 404 }, true);
         }else{
-            return this.apiCall(this.data.rooms[roomId]);
+            return this.apiCall(room);
         }
     }
 
