@@ -189,6 +189,16 @@ export class ApiMock{
             color: d.color,
         }));
         return this.apiCall(date)
+
+    patchRobot(robot){
+        // PATCH /robots/:id
+        let oldRobot = findById(this.data.robots, robot.id);
+        if( oldRobot === null ){
+            return this.apiCall({ message: "robot not found", code: 404 }, true);
+        }else{
+            let newRobot = Object.assign(oldRobot, robot);
+            return this.apiCall(newRobot);
+        }
     }
 
 }

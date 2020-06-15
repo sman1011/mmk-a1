@@ -151,6 +151,12 @@ let store = new Vuex.Store({
                 commit('set_floor_list', data)
 	    })
 	}
+=======
+                commit('set_robot', data) 
+            });
+        },
+        
+>>>>>>> 83f2f76... updated API for robot edit
 
         load_date_list({ commit }) {
             return api.getDateList().then(data => {
