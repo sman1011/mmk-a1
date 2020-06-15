@@ -86,9 +86,21 @@ let store = new Vuex.Store({
             });
         },
         
+        load_robot({ commit }, { robotId }){
+            return api.getRobot(robotId).then( data => {
+                commit('set_robot', data) 
+            });
+        },
+
         update_room({ commit }, room){
             return api.patchRoom(room).then( data => {
                 commit('set_room', data) 
+            });
+        },
+
+        update_robot({ commit }, robot){
+            return api.patchRobot(robot).then( data => {
+                commit('set_robot', data) 
             });
         },
         

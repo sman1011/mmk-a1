@@ -66,10 +66,11 @@ export class ApiMock{
     
     getRobot(robotId){
         // GET /robots/:id
-        if( floorId >= this.data.robots.length || floorId < 0 ){
+        let robot = findById(this.data.robots, robotId);
+        if( robot === null ){
             return this.apiCall({ message: "robot not found", code: 404 }, true);
         }else{
-            return this.apiCall(this.data.robots[robotId]);
+            return this.apiCall(robot);
         }
     }
     
@@ -81,6 +82,17 @@ export class ApiMock{
         }else{
             let newRoom = Object.assign(oldRoom, room);
             return this.apiCall(newRoom);
+        }
+    }
+
+    patchRobot(robot){
+        // PATCH /robots/:id
+        let oldRobot = findById(this.data.robots, robot.id);
+        if( oldRobot === null ){
+            return this.apiCall({ message: "robot not found", code: 404 }, true);
+        }else{
+            let newRobot = Object.assign(oldRobot, robot);
+            return this.apiCall(newRobot);
         }
     }
 
