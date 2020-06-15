@@ -32,7 +32,7 @@ export class ApiMock{
         this.data.floors.push(newFloor);
         return this.apiCall(newFloor);
     }
-    
+
     postRoom(room){
         // POST /rooms
         let id = findNextId(this.data.rooms);
@@ -40,7 +40,7 @@ export class ApiMock{
         this.data.rooms.push(newRoom);
         return this.apiCall(newRoom);
     }
-    
+
     postRobot(robot){
         // POST /robots
         let id = findNextId(this.data.robots);
@@ -48,7 +48,7 @@ export class ApiMock{
         this.data.robots.push(newRobot);
         return this.apiCall(newRobot);
     }
-    
+
     getFloorList(){
         // GET /floors
         let floors = this.data.floors.map( (f) => ({ id: f.id, name: f.name }) );

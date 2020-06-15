@@ -1,6 +1,7 @@
 yarn-error.log
 yarn.lock
 node_modules
+.idea
 
 public/assets/bundle.js
 public/assets/bundle.js.map

@@ -65,7 +65,7 @@ let store = new Vuex.Store({
                 commit('set_robot', data);
             });
         },
-        
+
         load_floor_list({ commit }){
             return api.getFloorList().then( data => {
                 commit('set_floor_list', data) 
@@ -104,7 +104,7 @@ let store = new Vuex.Store({
         
         load_robot({ commit }, { robotId }){
             return api.getRobot(robotId).then( data => {
-                commit('set_robot', data) 
+                commit('set_robot', data)
             });
         },
 
@@ -116,10 +116,10 @@ let store = new Vuex.Store({
 
         update_robot({ commit }, robot){
             return api.patchRobot(robot).then( data => {
-                commit('set_robot', data) 
+                commit('set_robot', data)
             });
         },
-        
+
     }
     
 });
