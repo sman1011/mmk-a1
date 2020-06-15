@@ -187,26 +187,50 @@
 
                 let events = [];
                 store.state.dateList.forEach((date) => {
-                    console.log(date.id);
-                    console.log(start.date)
-                    /*
-                    if(date.start > end.date) {
+                    let begin = new Date(`${date.startDate}T${date.begin}`)
+                    let stop = undefined;
+                    if(begin.getTime() > max.getTime()) {
                         return;
                     }
 
-                    if(date.end !== null && date.end < start.date) {
-                        return;
-                    }*/
+                    if(date.end !== undefined) {
+                        stop = new Date(`${date.endDate}T${date.end}`)
+                        if (date.end !== null && stop.getTime() < min.getTime()) {
+                            return;
+                        }
+                    }
 
                     switch (date.repeat) {
                         case "daily":
+                            let sDays = days;
+                            if(stop !== undefined){
+                                if(stop.getTime() < max.getTime()) {
+                                    sDays = (begin.getTime() - stop.getTime()) / 86400000;
+                                }
+                            }
+                            console.log(min.toISOString())
+                            for(let i = 0; i <= sDays; i++) {
+                                let d = new Date();
+                                d.setDate(min.getDate() + i + 1); // +1 to fix time zone
+                                console.log()
+
+                                events.push({
+                                    name: date.name,
+                                    start: `${d.toISOString().split('T')[0]}T${date.begin}`,
+                                    end: `${d.toISOString().split('T')[0]}T${date.end}`,
+                                    color: date.color,
+                                    details: `Room: ${date.room} - Robot: ${date.robot}`
+                                })
+                            }
+                            break;
                         case "weekly":
                         default:
                             events.push({
                                 name: date.name,
-                                start: date.startDate + 'T' + date.begin,
-                                end: date.startDate + 'T' + date.end,
+                                start: `${date.startDate}T${date.begin}`,
+                                end: `${date.startDate}T${date.end}`,
                                 color: date.color,
+                                details: `Room: ${date.room} - Robot: ${date.robot}`
                             })
                     }
 
