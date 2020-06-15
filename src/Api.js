@@ -84,6 +84,13 @@ export class ApiMock{
         }
     }
 
+    addFloor(floorName){
+        let newFloor = {
+            id: this.data.rooms.length,
+            name: floorName
+        };
+        return this.apiCall(newFloor);
+    }
 }
 
 export class Api{
