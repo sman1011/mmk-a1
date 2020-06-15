@@ -53,7 +53,7 @@ export class ApiMock{
 
     getRobotList(){
         // GET /robots
-        let rooms = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
         return this.apiCall(robots);
     }
     
