@@ -13,7 +13,11 @@ import FloorListPage from './pages/FloorListPage.vue';
 import FloorPage from './pages/FloorPage.vue';
 import StartPage from './pages/StartPage.vue';
 
-const vuetify = new Vuetify({});
+const vuetify = new Vuetify({
+    icons: {
+        iconfont: 'mdiSvg',
+    }, 
+});
 
 const routes = [
     { path: '/',                    component: StartPage },
