@@ -39,7 +39,8 @@ const routes = [
     { path: '/robots/:robot_id',    component: RobotPage },
 
     { path: '/timetable',           component: TimeTable },
-];
+    { path: '/robots/:robot_id',    component: RobotPage },
+]
 
 const router = new VueRouter({
   routes
