@@ -73,6 +73,12 @@ export default {
             this.$router.go(-1);
         }
     },
+    
+    methods: {
+        onNavBack(){
+            this.$router.go(-1);
+        }
+    },
 }
 </script>
 
