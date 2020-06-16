@@ -120,6 +120,7 @@ export class ApiMock{
         }
     }
 
+<<<<<<< HEAD
     patchRobot(robot){
         // PATCH /robots/:id
         let oldRobot = findById(this.data.robots, robot.id);
@@ -190,6 +191,8 @@ export class ApiMock{
         }));
         return this.apiCall(date)
 
+=======
+>>>>>>> 69693e4... rename timetable file
     patchRobot(robot){
         // PATCH /robots/:id
         let oldRobot = findById(this.data.robots, robot.id);

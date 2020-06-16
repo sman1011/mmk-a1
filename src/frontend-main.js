@@ -17,7 +17,7 @@ import RobotPage from './pages/RobotPage.vue';
 import NewRoomPage from './pages/NewRoomPage.vue';
 import NewRobotPage from './pages/NewRobotPage.vue';
 import NewFloorPage from './pages/NewFloorPage.vue';
-import TimeTable from "./pages/TimeTable.vue";
+import Timetable from "./pages/Timetable.vue";
 
 const vuetify = new Vuetify({
     icons: {
@@ -40,7 +40,7 @@ const routes = [
 
     { path: '/timetable',           component: TimeTable },
     { path: '/robots/:robot_id',    component: RobotPage },
-    { path: '/timetable',           component: TimeTable },
+    { path: '/timetables',           component: Timetable },
 ];
 
 const router = new VueRouter({
