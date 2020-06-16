@@ -37,6 +37,8 @@
 
 <template>
     <v-container>
+        <p>Select a floor to continue to the room and robots page</p>
+        
         <router-link class="text-h6 black--text"
                      v-for="floor in $store.state.floorList"
                      v-bind:key="floor.id"
