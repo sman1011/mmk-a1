@@ -86,8 +86,8 @@
                             <span v-html="selectedEvent.details"></span>
                         </v-card-text>
                         <v-card-actions>
+                            <v-spacer/>
                             <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
-                            <v-btn text color="secondary" @click="store(selectedElement)">Store</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -188,9 +188,9 @@
                         return;
                     }*/
                     if(room.id === roomId){
-                        rooms.unshift(`<option value="${room.id}">${room.name}</option>`)
+                        rooms.unshift({id: room.id, name: room.name})
                     } else {
-                        rooms.push(`<option value="${room.id}">${room.name}</option>`)
+                        rooms.push({id: room.id, name: room.name})
                     }
                 })
                 return rooms;
@@ -203,9 +203,9 @@
                         return
                     }*/
                     if(robot.id === robotId) {
-                        robots.unshift(`<option value="${robot.id}">${robot.name}</option>`)
+                        robots.unshift({id: robot.id, name: robot.name})
                     } else {
-                        robots.push(`<option value="${robot.id}">${robot.name}</option>`)
+                        robots.push({id: robot.id, name: robot.name})
                     }
                 })
                 return robots;
@@ -234,17 +234,14 @@
                     }
 
 
-                    let robots = this.listRobots(0, date.robot);
-                    let rooms = this.listRooms(0, date.room);
-
+                    let robot = this.listRobots(date.robot)[0];
+                    let room = this.listRooms(date.room)[0];
                     let details = `
-                                     <label>Name of the event is: </label><input id="${date.id}-name" value="${date.name}"/>
+                                     <label>room: </label><a href="#/rooms/${room.id}">${room.name}</a>
                                      <br/>
-                                     <label>cleaning robot is: </label><select id="${date.id}-robot">${robots}</select>
-                                     <br/>
-                                     <label>cleaning room is: </label><select id="${date.id}"-room">${rooms}</select>
+                                     <label>robot: </label><a href="#/robot/${robot.id}">${robot.name}</a>
                                  `
-
+                    console.log(room)
                     switch (date.repeat) {
                         case "daily":
                             let sDays = days;
@@ -301,7 +298,6 @@
 
                 })
 
-                console.log(events)
                 this.events = events
             },
 
