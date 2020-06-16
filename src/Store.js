@@ -84,8 +84,8 @@ let store = new Vuex.Store({
             });
         },
 
-        load_robot_list({ commit }){
-            return api.getRobotList().then( data => {
+        load_robot_list({ commit }, { floorId }){
+            return api.getRobotList(floorId).then( data => {
                 commit('set_robot_list', data) 
             });
         },

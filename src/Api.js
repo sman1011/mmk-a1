@@ -12,11 +12,11 @@ let findNextId = function(arr,){
 }
 
 export class ApiMock{
-    
+
     constructor(){
         this.data = mockData;
     }
-    
+
     apiCall(data, isError=false){
         // simulate delay from api call
         return new Promise( (resolve, reject) => {
@@ -70,7 +70,7 @@ export class ApiMock{
             return this.apiCall(floor);
         }
     }
-    
+
     getRoomList(floorId){
         // GET /loor/:floorId/rooms
         let rooms = this.data.rooms.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
@@ -87,12 +87,18 @@ export class ApiMock{
         }
     }
 
-    getRobotList(){
+    getRobotList(floorId){
         // GET /robots
-        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+        let robots=[];
+        if (floorId || floorId===0){
+            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
+        } else{
+            robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+
+        }
         return this.apiCall(robots);
     }
-    
+
     getRobot(robotId){
         // GET /robots/:id
         let robot = findById(this.data.robots, robotId);
@@ -102,7 +108,7 @@ export class ApiMock{
             return this.apiCall(robot);
         }
     }
-    
+
     patchRoom(room){
         // PATCH /rooms/:id
         let oldRoom = findById(this.data.rooms, room.id);
@@ -127,5 +133,5 @@ export class ApiMock{
 }
 
 export class Api{
-    
+
 }

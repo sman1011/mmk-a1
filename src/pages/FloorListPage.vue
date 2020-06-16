@@ -51,6 +51,7 @@
                 {{floor.name}}
             </v-card>
         </router-link>
+        <h3 v-if="$store.state.floorList===0">There are no Floors yet.</h3>
         <v-fab-transition>
             <v-btn
                     to="/floors/new"
