@@ -20,7 +20,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
                                 <span>{{ typeToLabel[type] }}</span>
-                                <v-icon right>mdi-menu-down</v-icon>
+                                <v-icon right>{{mdiMenuDown}}</v-icon>
                             </v-btn>
                         </template>
                         <v-list>
@@ -71,23 +71,31 @@
                         :activator="selectedElement"
                         offset-x
                 >
-                    <v-card
-                            color="grey lighten-4"
-                            min-width="350px"
-                            flat
-                    >
-                        <v-toolbar
-                                :color="selectedEvent.color"
-                                dark
-                        >
+                    <v-card color="grey lighten-4" min-width="350px" flat>
+                        <v-toolbar :color="selectedEvent.color" dark>
                             <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                            <v-spacer/>
+                            <v-btn icon @click="selectedEdit = !selectedEdit">
+                                <v-icon>{{mdiPencil}}</v-icon>
+                            </v-btn>
                         </v-toolbar>
                         <v-card-text>
-                            <span v-html="selectedEvent.details"></span>
+                            <template v-if="selectedEdit">
+                                <v-form >
+                                    <v-text-field v-model="selectedEvent.name" label="Event Name" required/>
+                                    <v-select v-bind:items="listRobots(0, 0)" v-model="changedEvent.robot" label="Robot"/>
+                                    <v-select v-bind:items="listRooms(0, 0)" v-model="changedEvent.rooms"  label="Rooms"/>
+                                    <v-btn flat class="success mx-0 mt-3" @click="store">Submit</v-btn>
+                                </v-form>
+                            </template>
+                            <template v-else>
+                                <span v-html="selectedEvent.details"></span>
+                            </template>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer/>
-                            <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+                            <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Cancel</v-btn>
+
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -98,7 +106,9 @@
 
 
 <script>
-    import { store } from '../Store.js'
+    import {store} from '../Store.js'
+    import {mdiPencil} from '@mdi/js'
+    import {mdiMenuDown} from '@mdi/js'
 
     export default {
         watch: {
@@ -117,6 +127,7 @@
             selectedEvent: {},
             selectedElement: null,
             selectedOpen: false,
+            selectedEdit: false,
             events: [],
             colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
             names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
@@ -125,6 +136,12 @@
             createEvent: null,
             createStart: null,
             extendOriginal: null,
+            mdiPencil,
+            mdiMenuDown,
+            changedEvent: {
+                robot: -1,
+                room: -1,
+            }
         }),
 
         mounted() {
@@ -133,8 +150,8 @@
 
         methods: {
 
-            store(selected) {
-                alert('todo' + JSON.stringify(selected))
+            store() {
+                alert('name: ' + this.selectedEvent.name + ' id: ' + this.selectedEvent.remoteId + ' Room: ' + this.changedEvent.room + ' Robot: ' + this.changedEvent.robot)
             },
 
             viewDay({date}) {
@@ -181,31 +198,31 @@
                 nativeEvent.stopPropagation()
             },
 
-            listRooms(floorId, roomId){
+            listRooms(floorId, roomId) {
                 let rooms = []
                 store.state.roomList.forEach((room) => {
                     /*if(room.floor !== floorId) {
                         return;
                     }*/
-                    if(room.id === roomId){
-                        rooms.unshift({id: room.id, name: room.name})
+                    if (room.id === roomId) {
+                        rooms.unshift({value: room.id, text: room.name})
                     } else {
-                        rooms.push({id: room.id, name: room.name})
+                        rooms.push({value: room.id, text: room.name})
                     }
                 })
                 return rooms;
             },
 
-            listRobots(floorId, robotId){
+            listRobots(floorId, robotId) {
                 let robots = []
                 store.state.robotList.forEach((robot) => {
                     /*if(robot.floor !== floorId) {
                         return
                     }*/
-                    if(robot.id === robotId) {
-                        robots.unshift({id: robot.id, name: robot.name})
+                    if (robot.id === robotId) {
+                        robots.unshift({value: robot.id, text: robot.name})
                     } else {
-                        robots.push({id: robot.id, name: robot.name})
+                        robots.push({value: robot.id, text: robot.name})
                     }
                 })
                 return robots;
@@ -222,11 +239,11 @@
                 store.state.dateList.forEach((date) => {
                     let begin = new Date(`${date.startDate}T${date.begin}`)
                     let stop = undefined;
-                    if(begin.getTime() > max.getTime()) {
+                    if (begin.getTime() > max.getTime()) {
                         return;
                     }
 
-                    if(date.end !== undefined) {
+                    if (date.end !== undefined) {
                         stop = new Date(`${date.endDate}T${date.end}`)
                         if (date.end !== null && stop.getTime() < min.getTime()) {
                             return;
@@ -237,23 +254,21 @@
                     let robot = this.listRobots(date.robot)[0];
                     let room = this.listRooms(date.room)[0];
                     let details = `
-                                     <label>room: </label><a href="#/rooms/${room.id}">${room.name}</a>
+                                     <label>room: </label><a href="#/rooms/${room.value}">${room.text}</a>
                                      <br/>
-                                     <label>robot: </label><a href="#/robot/${robot.id}">${robot.name}</a>
+                                     <label>robot: </label><a href="#/robots/${robot.value}">${robot.text}</a>
                                  `
-                    console.log(room)
                     switch (date.repeat) {
                         case "daily":
                             let sDays = days;
-                            if(stop !== undefined){
-                                if(stop.getTime() < max.getTime()) {
+                            if (stop !== undefined) {
+                                if (stop.getTime() < max.getTime()) {
                                     sDays = (begin.getTime() - stop.getTime()) / 86400000;
                                 }
                             }
 
 
-
-                            for(let i = 0; i <= sDays; i++) {
+                            for (let i = 0; i <= sDays; i++) {
                                 let d = new Date();
                                 d.setDate(min.getDate() + i); //TODO fix timezone
 
@@ -262,18 +277,19 @@
                                     start: `${d.toISOString().split('T')[0]}T${date.begin}`,
                                     end: `${d.toISOString().split('T')[0]}T${date.end}`,
                                     color: date.color,
-                                    details: details
+                                    details: details,
+                                    remoteId: date.id,
                                 })
                             }
                             break;
                         case "weekly":
                             let sWeek = days / 7;
-                            if(stop !== undefined){
-                                if(stop.getTime() < max.getTime()) {
+                            if (stop !== undefined) {
+                                if (stop.getTime() < max.getTime()) {
                                     sWeek = (begin.getTime() - stop.getTime()) / 86400000 / 7;
                                 }
                             }
-                            for(let i = 0; i <= sWeek; i++) {
+                            for (let i = 0; i <= sWeek; i++) {
                                 let d = new Date();
                                 d.setDate(min.getDate() + (i * 7) + 1); // +1 to fix time zone
 
@@ -305,7 +321,7 @@
                 return Math.floor((b - a + 1) * Math.random()) + a
             },
 
-            startDrag ({ event, timed }) {
+            startDrag({event, timed}) {
                 if (event && timed) {
                     this.dragEvent = event
                     this.dragTime = null
@@ -313,7 +329,7 @@
                 }
             },
 
-            startTime (tms) {
+            startTime(tms) {
                 const mouse = this.toTime(tms)
 
                 if (this.dragEvent && this.dragTime === null) {
@@ -345,13 +361,13 @@
                 }
             },
 
-            extendBottom (event) {
+            extendBottom(event) {
                 this.createEvent = event
                 this.createStart = event.start
                 this.extendOriginal = event.end
             },
 
-            mouseMove (tms) {
+            mouseMove(tms) {
                 const mouse = this.toTime(tms)
 
                 if (this.dragEvent && this.dragTime !== null) {
@@ -374,7 +390,7 @@
                 }
             },
 
-            endDrag () {
+            endDrag() {
                 this.dragTime = null
                 this.dragEvent = null
                 this.createEvent = null
@@ -382,7 +398,7 @@
                 this.extendOriginal = null
             },
 
-            cancelDrag () {
+            cancelDrag() {
                 if (this.createEvent) {
                     if (this.extendOriginal) {
                         this.createEvent.end = this.extendOriginal
@@ -400,7 +416,7 @@
                 this.dragEvent = null
             },
 
-            roundTime (time, down = true) {
+            roundTime(time, down = true) {
                 const roundTo = 15 // minutes
                 const roundDownTime = roundTo * 60 * 1000
 
@@ -409,11 +425,11 @@
                     : time + (roundDownTime - (time % roundDownTime))
             },
 
-            toTime (tms) {
+            toTime(tms) {
                 return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime()
             },
 
-            rndElement (arr) {
+            rndElement(arr) {
                 return arr[this.rnd(0, arr.length - 1)]
             },
         },
