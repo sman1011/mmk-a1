@@ -1,6 +1,7 @@
 <script>
 
 import { mdiPencil } from '@mdi/js'
+import { mdiCalendar } from '@mdi/js'
 
 export default {
     name: "RoomPage",
@@ -15,6 +16,7 @@ export default {
             floor: 0,
             edit: false,
             mdiPencil,
+            mdiCalendar,
         }; 
     },
     
@@ -22,10 +24,9 @@ export default {
         floorSelectItems(){
             return this.$store.state.floorList.map( f => ({ text: f.name, value: f.id }) );
         },
-        /*floorName(){
-            let floors = this.$store.state.floorList.filter( f => f.id == this.$store.state.room.floor );
-            return floors.length > 0 ? floors[0].name : "";
-        }*/
+        floorName(){
+            return this.$store.getters.floorName(this.$store.state.room.floor);
+        },
     },
 
     watch: {
@@ -78,15 +79,41 @@ export default {
             <v-toolbar dense >
                 <v-toolbar-title>Room {{this.$store.state.room.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon v-on:click="edit = !edit">
-                  <v-icon>{{mdiPencil}}</v-icon>
-                </v-btn>
+
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn 
+                            icon 
+                            v-on:click="edit = !edit"
+                            v-bind="attrs" 
+                            v-on="on"
+                        >
+                            <v-icon>{{mdiPencil}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Edit room</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn 
+                            icon 
+                            v-on:click="$router.push('/timetables')"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon>{{mdiCalendar}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Open Timetable</span>
+                </v-tooltip>
+
             </v-toolbar>
         </v-row>
         
-        <template v-if="edit" >
-            <v-row>
-                <v-col lg="4">
+        <v-row>
+            <v-col lg="4">
+                <template v-if="edit" >
                     <v-form>
                         
                         <v-text-field
@@ -107,30 +134,41 @@ export default {
                         <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
                         
                     </v-form>
-                </v-col>
-            </v-row>
+                </template>
+                
+                <template v-else >
 
-        </template>
-        <template v-else >
-            <v-container>
-                <v-row>
-                    <v-col lg="3">Name</v-col>
-                    <v-col>{{this.$store.state.room.name}}</v-col>
-                </v-row>
-                <v-row>
-                    <v-col lg="3">Floor</v-col>
-                    <v-col>{{this.$store.getters.floorName(this.$store.state.room.floor)}}</v-col>
-                </v-row>
-                <v-row>
-                    <v-col lg="3">Last use</v-col>
-                    <v-col>01.05.20 11:00</v-col>
-                </v-row>
-                <v-row>
-                    <v-col lg="3">Added on</v-col>
-                    <v-col>03.06.16</v-col>
-                </v-row>
-            </v-container>
-        </template>
+                    <v-list two-line>
+                        <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-subtitle>Room Name</v-list-item-subtitle>
+                              <v-list-item-title>{{this.$store.state.room.name}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Floor</v-list-item-subtitle>
+                                <v-list-item-title>{{floorName}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Last use</v-list-item-subtitle>
+                                <v-list-item-title>01.05.20 11:00</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Added on</v-list-item-subtitle>
+                                <v-list-item-title>03.06.16</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    
+                </template>
+                
+            </v-col>
+        </v-row>
         
     </v-container>
 </template>
