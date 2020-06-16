@@ -1,38 +1,38 @@
 <script>
 
-import {mdiPlus} from '@mdi/js'
+    import {mdiPlus} from '@mdi/js'
 
-export default {
-    name: "FloorListPage",
+    export default {
+        name: "FloorListPage",
 
-    props: {},
+        props: {},
 
-    data: function () {
-        return {
-            fab: false,
-            mdiPlus,
-            dialog: false,
-            floorNameEdit: "",
-        };
-    },
+        data: function () {
+            return {
+                fab: false,
+                mdiPlus,
+                dialog: false,
+                floorNameEdit: "",
+            };
+        },
 
-    computed: {},
+        computed: {},
 
-    watch: {
-        '$route': 'fetchData'
-    },
+        watch: {
+            '$route': 'fetchData'
+        },
 
-    created() {
-        this.fetchData()
-    },
+        created() {
+            this.fetchData()
+        },
 
-    methods: {
-        fetchData(id) {
-            this.$store.dispatch('load_floor_list');
+        methods: {
+            fetchData(id) {
+                this.$store.dispatch('load_floor_list');
+            }
         }
-    }
 
-}
+    }
 </script>
 
 <template>
@@ -51,44 +51,21 @@ export default {
                 {{floor.name}}
             </v-card>
         </router-link>
-
-        <v-dialog v-model="dialog" scrollable max-width="300px">
-            <template v-slot:activator="{ on, attrs }">
-                <v-fab-transition>
-                    <v-btn
-                            class="mb-3 mr-3"
-                            v-bind:style="{bottom:0, right:0}"
-                            v-bind="attrs"
-                            v-on="on"
-                            color="primary"
-                            contained
-                            dark
-                            absolute
-                            right
-                            fab
-                    >
-                        <v-icon>{{mdiPlus}}</v-icon>
-                    </v-btn>
-                </v-fab-transition>
-            </template>
-            <v-card>
-                <v-card-title>Enter a floor name</v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                    <v-form>
-                        <v-text-field
-                                v-model="floorNameEdit"
-                                label="Floor name"
-                                required
-                        ></v-text-field>
-                    </v-form>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-btn color="blue darken-1" text @click="() => {this.$store.dispatch('add_floor',floorNameEdit); dialog = false; floorNameEdit = ''}">Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <v-fab-transition>
+            <v-btn
+                    to="/floors/new"
+                    class="mb-3 mr-3"
+                    v-bind:style="{bottom:0, right:0}"
+                    color="primary"
+                    contained
+                    dark
+                    absolute
+                    right
+                    fab
+            >
+                <v-icon>{{mdiPlus}}</v-icon>
+            </v-btn>
+        </v-fab-transition>
     </v-container>
 </template>
 
