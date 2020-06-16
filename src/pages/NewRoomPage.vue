@@ -72,6 +72,7 @@ export default {
                     </v-select>
                     
                     <v-btn color="success" v-on:click="onSave">Add Room</v-btn>
+                    <v-btn color="error" v-on:click="$router.go(-1)">Cancel</v-btn>
                     <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
                     
                 </v-form>
