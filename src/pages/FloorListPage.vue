@@ -1,10 +1,9 @@
-<script>var roomNameSaved;
+<script>
 
 import {mdiPlus} from '@mdi/js'
 
 export default {
     name: "FloorListPage",
-    components: {},
 
     props: {},
 
@@ -83,12 +82,6 @@ export default {
                                 required
                         ></v-text-field>
                     </v-form>
-                    <!--<v-input v-model="dialogm1" column>-->
-                        <!--<v-radio label="Bahamas, The" value="bahamas"></v-radio>-->
-                        <!--<v-radio label="Bahrain" value="bahrain"></v-radio>-->
-                        <!--<v-radio label="Bangladesh" value="bangladesh"></v-radio>-->
-                        <!--<v-radio label="Burundi" value="burundi"></v-radio>-->
-                    <!--</v-input>-->
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
