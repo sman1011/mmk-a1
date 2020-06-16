@@ -206,7 +206,7 @@ export class ApiMock{
 
     getDateList(){
         // GET /date
-        let date = this.data.dates.map(d => ({
+        let dates = this.data.dates.map(d => ({
             id: d.id,
             name: d.name,
             startDate: d.startDate,
