@@ -33,6 +33,14 @@ export class ApiMock{
         return this.apiCall(newRoom);
     }
     
+    postRobot(robot){
+        // POST /robots
+        let id = findNextId(this.data.robots);
+        let newRobot = Object.assign(robot, {id});
+        this.data.robots.push(newRobot);
+        return this.apiCall(newRobot);
+    }
+    
     getFloorList(){
         // GET /floors
         let floors = this.data.floors.map( (f) => ({ id: f.id, name: f.name }) );
