@@ -22,7 +22,7 @@ module.exports = function(env, argv){
             ]
         },
 
-        watch: !env.production,
+        // watch: !env.production,
 
         plugins: [
             new VueLoaderPlugin(),
