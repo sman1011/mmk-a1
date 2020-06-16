@@ -86,13 +86,8 @@
                             <span v-html="selectedEvent.details"></span>
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn
-                                    text
-                                    color="secondary"
-                                    @click="selectedOpen = false"
-                            >
-                                Cancel
-                            </v-btn>
+                            <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+                            <v-btn text color="secondary" @click="store(selectedElement)">Store</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -137,6 +132,11 @@
         },
 
         methods: {
+
+            store(selected) {
+                alert('todo' + JSON.stringify(selected))
+            },
+
             viewDay({date}) {
                 this.focus = date
                 this.type = 'day'
@@ -160,6 +160,8 @@
 
             fetchData() {
                 store.dispatch('load_date_list');
+                store.dispatch('load_robot_list');
+                store.dispatch('load_full_room_list')
             },
 
             showEvent({nativeEvent, event}) {
@@ -179,6 +181,36 @@
                 nativeEvent.stopPropagation()
             },
 
+            listRooms(floorId, roomId){
+                let rooms = []
+                store.state.roomList.forEach((room) => {
+                    /*if(room.floor !== floorId) {
+                        return;
+                    }*/
+                    if(room.id === roomId){
+                        rooms.unshift(`<option value="${room.id}">${room.name}</option>`)
+                    } else {
+                        rooms.push(`<option value="${room.id}">${room.name}</option>`)
+                    }
+                })
+                return rooms;
+            },
+
+            listRobots(floorId, robotId){
+                let robots = []
+                store.state.robotList.forEach((robot) => {
+                    /*if(robot.floor !== floorId) {
+                        return
+                    }*/
+                    if(robot.id === robotId) {
+                        robots.unshift(`<option value="${robot.id}">${robot.name}</option>`)
+                    } else {
+                        robots.push(`<option value="${robot.id}">${robot.name}</option>`)
+                    }
+                })
+                return robots;
+            },
+
             updateRange({start, end}) {
                 this.fetchData()
                 const min = new Date(`${start.date}T00:00:00`)
@@ -186,6 +218,7 @@
                 const days = (max.getTime() - min.getTime()) / 86400000;
 
                 let events = [];
+
                 store.state.dateList.forEach((date) => {
                     let begin = new Date(`${date.startDate}T${date.begin}`)
                     let stop = undefined;
@@ -200,6 +233,18 @@
                         }
                     }
 
+
+                    let robots = this.listRobots(0, date.robot);
+                    let rooms = this.listRooms(0, date.room);
+
+                    let details = `
+                                     <label>Name of the event is: </label><input id="${date.id}-name" value="${date.name}"/>
+                                     <br/>
+                                     <label>cleaning robot is: </label><select id="${date.id}-robot">${robots}</select>
+                                     <br/>
+                                     <label>cleaning room is: </label><select id="${date.id}"-room">${rooms}</select>
+                                 `
+
                     switch (date.repeat) {
                         case "daily":
                             let sDays = days;
@@ -208,16 +253,19 @@
                                     sDays = (begin.getTime() - stop.getTime()) / 86400000;
                                 }
                             }
+
+
+
                             for(let i = 0; i <= sDays; i++) {
                                 let d = new Date();
-                                d.setDate(min.getDate() + i + 1); // +1 to fix time zone
+                                d.setDate(min.getDate() + i); //TODO fix timezone
 
                                 events.push({
                                     name: date.name,
                                     start: `${d.toISOString().split('T')[0]}T${date.begin}`,
                                     end: `${d.toISOString().split('T')[0]}T${date.end}`,
                                     color: date.color,
-                                    details: `Room: ${date.room} - Robot: ${date.robot}`
+                                    details: details
                                 })
                             }
                             break;
@@ -237,7 +285,7 @@
                                     start: `${d.toISOString().split('T')[0]}T${date.begin}`,
                                     end: `${d.toISOString().split('T')[0]}T${date.end}`,
                                     color: date.color,
-                                    details: `Room: ${date.room} - Robot: ${date.robot}`
+                                    details: details
                                 })
                             }
                             break;
@@ -247,7 +295,7 @@
                                 start: `${date.startDate}T${date.begin}`,
                                 end: `${date.startDate}T${date.end}`,
                                 color: date.color,
-                                details: `Room: ${date.room} - Robot: ${date.robot}`
+                                details: details
                             })
                     }
 
@@ -277,6 +325,16 @@
 
                     this.dragTime = mouse - start
                 } else {
+                    let robots = this.listRobots(0, 0);
+                    let rooms = this.listRooms(0, 0);
+
+                    let details = `
+                                     <label>Name of the event is: </label><input id="${this.events.length}-name" value="Event #${this.events.length}"/>
+                                     <br/>
+                                     <label>cleaning robot is: </label><select id="${this.events.length}-robot">${robots}</select>
+                                     <br/>
+                                     <label>cleaning room is: </label><select id="${this.events.length}"-room">${rooms}</select>
+                                 `
                     this.createStart = this.roundTime(mouse)
                     this.createEvent = {
                         name: `Event #${this.events.length}`,
@@ -284,6 +342,7 @@
                         start: this.createStart,
                         end: this.createStart,
                         timed: true,
+                        details: details,
                     }
 
                     this.events.push(this.createEvent)
