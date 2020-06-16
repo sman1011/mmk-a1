@@ -50,6 +50,22 @@ let store = new Vuex.Store({
     },
     
     actions: {
+        add_new_floor({ commit }, floor){
+            return api.postFloor(floor).then( data => {
+                commit('set_floor', data);
+            });
+        },
+        add_new_room({ commit }, room){
+            return api.postRoom(room).then( data => {
+                commit('set_room', data);
+            });
+        },
+        add_new_robot({ commit }, robot){
+            return api.postRobot(robot).then( data => {
+                commit('set_robot', data);
+            });
+        },
+        
         load_floor_list({ commit }){
             return api.getFloorList().then( data => {
                 commit('set_floor_list', data) 
