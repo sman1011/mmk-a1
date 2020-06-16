@@ -14,6 +14,7 @@ import FloorPage from './pages/FloorPage.vue';
 import StartPage from './pages/StartPage.vue';
 import RoomPage from './pages/RoomPage.vue';
 import RobotPage from './pages/RobotPage.vue';
+import NewRoomPage from './pages/NewRoomPage.vue';
 
 const vuetify = new Vuetify({
     icons: {
@@ -25,6 +26,7 @@ const routes = [
     { path: '/',                    component: StartPage },
     { path: '/floors',              component: FloorListPage },
     { path: '/floors/:floor_id',    component: FloorPage },
+    { path: '/rooms/new',           component: NewRoomPage },
     { path: '/rooms/:room_id',      component: RoomPage },
     { path: '/robots/:robot_id',    component: RobotPage },
 ]

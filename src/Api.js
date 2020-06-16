@@ -6,6 +6,11 @@ let findById = function(arr, id){
     return r.length > 0 ? r[0] : null;
 }
 
+let findNextId = function(arr,){
+    let r = arr.map( x => x.id );
+    return r.length > 0 ? Math.max(...r) + 1 : 0;
+}
+
 export class ApiMock{
     
     constructor(){
@@ -18,6 +23,14 @@ export class ApiMock{
             let func = isError ? reject : resolve;
             setTimeout( () => func(Object.assign(data)) , 100);
         });
+    }
+    
+    postRoom(room){
+        // POST /rooms
+        let id = findNextId(this.data.rooms);
+        let newRoom = Object.assign(room, {id});
+        this.data.rooms.push(newRoom);
+        return this.apiCall(newRoom);
     }
     
     getFloorList(){
