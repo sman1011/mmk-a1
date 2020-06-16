@@ -1,6 +1,7 @@
 <script>
 
 import { mdiPencil } from '@mdi/js'
+import { mdiCalendar } from '@mdi/js'
 
 import FloorMap from '../components/FloorMap.vue';
 
@@ -17,12 +18,16 @@ export default {
             floor: 0,
             edit: false,
             mdiPencil,
+            mdiCalendar,
         }; 
     },
     
     computed:{
         floorSelectItems(){
             return this.$store.state.floorList.map( f => ({ text: f.name, value: f.id }) );
+        },
+        floorName(){
+            return this.$store.getters.floorName(this.$store.state.robot.floor);
         },
     },
 
@@ -74,68 +79,114 @@ export default {
             <v-toolbar dense >
                 <v-toolbar-title>Robot {{this.$store.state.robot.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon v-on:click="edit = !edit">
-                  <v-icon>{{mdiPencil}}</v-icon>
-                </v-btn>
+
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn 
+                            icon 
+                            v-on:click="edit = !edit"
+                            v-bind="attrs" 
+                            v-on="on"
+                        >
+                            <v-icon>{{mdiPencil}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Edit robot</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn 
+                            icon 
+                            v-on:click="$router.push('/timetables')"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon>{{mdiCalendar}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Open Timetable</span>
+                </v-tooltip>
+
             </v-toolbar>
         </v-row>
         
-        <v-row>
-            <v-col>
-                
-                <template v-if="edit" >
-                    <v-row>
-                        <v-col>
-                            <v-form>
-                                
-                                <v-text-field
-                                    v-model="name"
-                                    label="Robot Name"
-                                    required
-                                ></v-text-field>
-                                
-                                <v-select
-                                    v-bind:items="floorSelectItems"
-                                    v-model="floor"
-                                    label="Floor"
-                                >
-                                </v-select>
-                                
-                                <v-btn color="success" v-on:click="onSave">Save</v-btn>
-                                <v-btn color="error" v-on:click="onCancel">Cancel</v-btn>
-                                <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
-                                
-                            </v-form>
-                        </v-col>
-                    </v-row>
 
+        <v-row>
+            <v-col lg="4">
+                <template v-if="edit" >
+                    <v-form>
+                        
+                        <v-text-field
+                            v-model="name"
+                            label="Robot Name"
+                            required
+                        ></v-text-field>
+                        
+                        <v-select
+                            v-bind:items="floorSelectItems"
+                            v-model="floor"
+                            label="Floor"
+                        >
+                        </v-select>
+                        
+                        <v-btn color="success" v-on:click="onSave">Save</v-btn>
+                        <v-btn color="error" v-on:click="onCancel">Cancel</v-btn>
+                        <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
+                        
+                    </v-form>
                 </template>
+                
                 <template v-else >
-                    <v-container>
-                        <v-row>
-                            <v-col lg="3">Name</v-col>
-                            <v-col>{{this.$store.state.robot.name}}</v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col lg="3">Floor</v-col>
-                            <v-col>{{this.$store.getters.floorName(this.$store.state.robot.floor)}}</v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col lg="3">Last use</v-col>
-                            <v-col>01.05.20 11:00</v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col lg="3">Added on</v-col>
-                            <v-col>03.06.16</v-col>
-                        </v-row>
-                    </v-container>
+
+                    <v-list two-line>
+                        <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-subtitle>Robot Name</v-list-item-subtitle>
+                              <v-list-item-title>{{this.$store.state.robot.name}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Floor</v-list-item-subtitle>
+                                <v-list-item-title>{{floorName}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Vendor</v-list-item-subtitle>
+                                <v-list-item-title>iRobot</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Model</v-list-item-subtitle>
+                                <v-list-item-title>Roomba 9000</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Last use</v-list-item-subtitle>
+                                <v-list-item-title>01.05.20 11:00</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Added on</v-list-item-subtitle>
+                                <v-list-item-title>03.06.16</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    
                 </template>
                 
             </v-col>
+
             <v-col>
                 <div>Current floor map of this robot</div>
                 <floor-map class="robot-page__map" ></floor-map>
             </v-col>
+
         </v-row>
         
     </v-container>
