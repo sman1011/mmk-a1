@@ -17,6 +17,7 @@ export default {
             name: "",
             floor: 0,
             edit: false,
+            mode: "",
             mdiPencil,
             mdiCalendar,
         }; 
@@ -44,8 +45,7 @@ export default {
             let robotId = parseInt(this.$route.params.robot_id);
             
             this.$store.dispatch('load_robot', { robotId }).then( () => {
-                this.name = this.$store.state.robot.name;
-                this.floor = this.$store.state.robot.floor;
+                this.onClear();
             });
             
             this.$store.dispatch('load_floor_list');
@@ -56,6 +56,7 @@ export default {
                 id: this.$store.state.robot.id,
                 name: this.name,
                 floor: this.floor,
+                currentMode: this.mode,
             };
             this.$store.dispatch('update_robot', robot).then( () => {
                 this.edit = false;
@@ -64,6 +65,7 @@ export default {
         onClear(){
             this.name = this.$store.state.robot.name;
             this.floor = this.$store.state.robot.floor;
+            this.mode = this.$store.state.robot.currentMode;
         },
         onCancel(){
             this.onClear();
@@ -129,6 +131,13 @@ export default {
                             label="Floor"
                         >
                         </v-select>
+
+                        <v-select
+                            v-bind:items="this.$store.state.robot.availableModes"
+                            v-model="mode"
+                            label="Operation Mode"
+                        >
+                        </v-select>
                         
                         <v-btn color="success" v-on:click="onSave">Save</v-btn>
                         <v-btn color="error" v-on:click="onCancel">Cancel</v-btn>
@@ -154,14 +163,20 @@ export default {
                         </v-list-item>
                         <v-list-item>
                             <v-list-item-content>
+                                <v-list-item-subtitle>Operation Mode</v-list-item-subtitle>
+                                <v-list-item-title>{{mode}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
                                 <v-list-item-subtitle>Vendor</v-list-item-subtitle>
-                                <v-list-item-title>iRobot</v-list-item-title>
+                                <v-list-item-title>{{this.$store.state.robot.vendor}}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-subtitle>Model</v-list-item-subtitle>
-                                <v-list-item-title>Roomba 9000</v-list-item-title>
+                                <v-list-item-title>{{this.$store.state.robot.model}}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
