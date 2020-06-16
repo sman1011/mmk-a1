@@ -6,7 +6,7 @@ module.exports = function(env, argv){
     return {
         mode: env.production ? 'production' : 'development',
         entry: './src/frontend-main.js',
-        
+
         output: {
             path: path.resolve(__dirname, 'public/assets'),
             filename: 'bundle.js'
@@ -21,6 +21,8 @@ module.exports = function(env, argv){
                 { test: /\.vue$/, use: 'vue-loader' }
             ]
         },
+
+        // watch: !env.production,
 
         plugins: [
             new VueLoaderPlugin(),
