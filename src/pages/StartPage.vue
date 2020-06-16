@@ -28,7 +28,6 @@ export default {
 
 <template>
     <div>
-        <h1>Cleaning Organizer</h1>
         <div class="d-flex flex-row justify-center flex-grow-1">
             <div class="d-flex flex-column flex-grow-1 ma-4 mt-9">
                 <v-menu bottom offset-y>
