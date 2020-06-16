@@ -30,7 +30,7 @@ export default {
                 name: this.name,
             };
             this.$store.dispatch('add_new_floor', floor).then( () => {
-                this.$router.push(`/floors/${this.$store.state.floor.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){

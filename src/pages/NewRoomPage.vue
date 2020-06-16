@@ -39,7 +39,7 @@ export default {
                 floor: this.floor,
             };
             this.$store.dispatch('add_new_room', room).then( () => {
-                this.$router.push(`/rooms/${this.$store.state.room.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){

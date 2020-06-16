@@ -38,7 +38,7 @@ export default {
                 floor: this.floor,
             };
             this.$store.dispatch('add_new_robot', robot).then( () => {
-                this.$router.push(`/robots/${this.$store.state.robot.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){
