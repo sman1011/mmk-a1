@@ -38,8 +38,6 @@ const routes = [
     { path: '/robots/new',          component: NewRobotPage },
     { path: '/robots/:robot_id',    component: RobotPage },
 
-    { path: '/timetable',           component: TimeTable },
-    { path: '/robots/:robot_id',    component: RobotPage },
     { path: '/timetables',           component: Timetable },
 ];
 
