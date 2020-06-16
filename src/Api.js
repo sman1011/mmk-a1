@@ -24,6 +24,14 @@ export class ApiMock{
             setTimeout( () => func(Object.assign(data)) , 100);
         });
     }
+
+    postFloor(floors){
+        // POST /floors
+        let id = findNextId(this.data.floors);
+        let newFloor = Object.assign(floors, {id});
+        this.data.floors.push(newFloor);
+        return this.apiCall(newFloor);
+    }
     
     postRoom(room){
         // POST /rooms
