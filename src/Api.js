@@ -6,6 +6,11 @@ let findById = function(arr, id){
     return r.length > 0 ? r[0] : null;
 }
 
+let findNextId = function(arr,){
+    let r = arr.map( x => x.id );
+    return r.length > 0 ? Math.max(...r) + 1 : 0;
+}
+
 export class ApiMock{
     
     constructor(){
@@ -18,6 +23,30 @@ export class ApiMock{
             let func = isError ? reject : resolve;
             setTimeout( () => func(Object.assign(data)) , 100);
         });
+    }
+
+    postFloor(floors){
+        // POST /floors
+        let id = findNextId(this.data.floors);
+        let newFloor = Object.assign(floors, {id});
+        this.data.floors.push(newFloor);
+        return this.apiCall(newFloor);
+    }
+    
+    postRoom(room){
+        // POST /rooms
+        let id = findNextId(this.data.rooms);
+        let newRoom = Object.assign(room, {id});
+        this.data.rooms.push(newRoom);
+        return this.apiCall(newRoom);
+    }
+    
+    postRobot(robot){
+        // POST /robots
+        let id = findNextId(this.data.robots);
+        let newRobot = Object.assign(robot, {id});
+        this.data.robots.push(newRobot);
+        return this.apiCall(newRobot);
     }
     
     getFloorList(){
@@ -66,10 +95,11 @@ export class ApiMock{
     
     getRobot(robotId){
         // GET /robots/:id
-        if( floorId >= this.data.robots.length || floorId < 0 ){
+        let robot = findById(this.data.robots, robotId);
+        if( robot === null ){
             return this.apiCall({ message: "robot not found", code: 404 }, true);
         }else{
-            return this.apiCall(this.data.robots[robotId]);
+            return this.apiCall(robot);
         }
     }
     
@@ -90,6 +120,17 @@ export class ApiMock{
             name: floorName
         };
         return this.apiCall(newFloor);
+    }
+  
+    patchRobot(robot){
+        // PATCH /robots/:id
+        let oldRobot = findById(this.data.robots, robot.id);
+        if( oldRobot === null ){
+            return this.apiCall({ message: "robot not found", code: 404 }, true);
+        }else{
+            let newRobot = Object.assign(oldRobot, robot);
+            return this.apiCall(newRobot);
+        }
     }
 }
 

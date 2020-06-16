@@ -3,9 +3,11 @@
 import { mdiPencil } from '@mdi/js'
 import { mdiCalendar } from '@mdi/js'
 
+import FloorMap from '../components/FloorMap.vue';
+
 export default {
-    name: "RoomPage",
-    components: {  },
+    name: "RobotPage",
+    components: { FloorMap },
     
     props:{
     },
@@ -15,6 +17,7 @@ export default {
             name: "",
             floor: 0,
             edit: false,
+            mode: "",
             mdiPencil,
             mdiCalendar,
         }; 
@@ -25,7 +28,7 @@ export default {
             return this.$store.state.floorList.map( f => ({ text: f.name, value: f.id }) );
         },
         floorName(){
-            return this.$store.getters.floorName(this.$store.state.room.floor);
+            return this.$store.getters.floorName(this.$store.state.robot.floor);
         },
     },
 
@@ -39,31 +42,30 @@ export default {
     
     methods:{
         fetchData(id){
-            let roomId = parseInt(this.$route.params.room_id);
+            let robotId = parseInt(this.$route.params.robot_id);
             
-            this.$store.dispatch('load_room', { roomId }).then( () => {
-                this.name = this.$store.state.room.name;
-                this.floor = this.$store.state.room.floor;
+            this.$store.dispatch('load_robot', { robotId }).then( () => {
+                this.onClear();
             });
             
-            if( this.$store.state.floorList.length == 0 ){
-                this.$store.dispatch('load_floor_list');
-            }
+            this.$store.dispatch('load_floor_list');
         },
         
         onSave(){
-            let room = {
-                id: this.$store.state.room.id,
+            let robot = {
+                id: this.$store.state.robot.id,
                 name: this.name,
                 floor: this.floor,
+                currentMode: this.mode,
             };
-            this.$store.dispatch('update_room', room).then( () => {
+            this.$store.dispatch('update_robot', robot).then( () => {
                 this.edit = false;
             });
         },
         onClear(){
-            this.name = this.$store.state.room.name;
-            this.floor = this.$store.state.room.floor;
+            this.name = this.$store.state.robot.name;
+            this.floor = this.$store.state.robot.floor;
+            this.mode = this.$store.state.robot.currentMode;
         },
         onCancel(){
             this.onClear();
@@ -77,7 +79,7 @@ export default {
     <v-container>
         <v-row>
             <v-toolbar dense >
-                <v-toolbar-title>Room {{this.$store.state.room.name}}</v-toolbar-title>
+                <v-toolbar-title>Robot {{this.$store.state.robot.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
@@ -91,7 +93,7 @@ export default {
                             <v-icon>{{mdiPencil}}</v-icon>
                         </v-btn>
                     </template>
-                    <span>Edit room</span>
+                    <span>Edit robot</span>
                 </v-tooltip>
 
                 <v-tooltip bottom>
@@ -111,6 +113,7 @@ export default {
             </v-toolbar>
         </v-row>
         
+
         <v-row>
             <v-col lg="4">
                 <template v-if="edit" >
@@ -118,7 +121,7 @@ export default {
                         
                         <v-text-field
                             v-model="name"
-                            label="Room Name"
+                            label="Robot Name"
                             required
                         ></v-text-field>
                         
@@ -126,6 +129,13 @@ export default {
                             v-bind:items="floorSelectItems"
                             v-model="floor"
                             label="Floor"
+                        >
+                        </v-select>
+
+                        <v-select
+                            v-bind:items="this.$store.state.robot.availableModes"
+                            v-model="mode"
+                            label="Operation Mode"
                         >
                         </v-select>
                         
@@ -141,14 +151,32 @@ export default {
                     <v-list two-line>
                         <v-list-item>
                             <v-list-item-content>
-                              <v-list-item-subtitle>Room Name</v-list-item-subtitle>
-                              <v-list-item-title>{{this.$store.state.room.name}}</v-list-item-title>
+                              <v-list-item-subtitle>Robot Name</v-list-item-subtitle>
+                              <v-list-item-title>{{this.$store.state.robot.name}}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-subtitle>Floor</v-list-item-subtitle>
                                 <v-list-item-title>{{floorName}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Operation Mode</v-list-item-subtitle>
+                                <v-list-item-title>{{mode}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Vendor</v-list-item-subtitle>
+                                <v-list-item-title>{{this.$store.state.robot.vendor}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>Model</v-list-item-subtitle>
+                                <v-list-item-title>{{this.$store.state.robot.model}}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
@@ -168,10 +196,20 @@ export default {
                 </template>
                 
             </v-col>
+
+            <v-col>
+                <div>Current floor map of this robot</div>
+                <floor-map class="robot-page__map" ></floor-map>
+            </v-col>
+
         </v-row>
         
     </v-container>
 </template>
 
 <style>
+.robot-page__map{
+    max-width: 300px;
+    margin: 1em 2em;
+}
 </style>

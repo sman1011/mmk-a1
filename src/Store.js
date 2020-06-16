@@ -53,6 +53,22 @@ let store = new Vuex.Store({
     },
     
     actions: {
+        add_new_floor({ commit }, floor){
+            return api.postFloor(floor).then( data => {
+                commit('set_floor', data);
+            });
+        },
+        add_new_room({ commit }, room){
+            return api.postRoom(room).then( data => {
+                commit('set_room', data);
+            });
+        },
+        add_new_robot({ commit }, robot){
+            return api.postRobot(robot).then( data => {
+                commit('set_robot', data);
+            });
+        },
+        
         load_floor_list({ commit }){
             return api.getFloorList().then( data => {
                 commit('set_floor_list', data) 
@@ -89,6 +105,12 @@ let store = new Vuex.Store({
             });
         },
         
+        load_robot({ commit }, { robotId }){
+            return api.getRobot(robotId).then( data => {
+                commit('set_robot', data) 
+            });
+        },
+
         update_room({ commit }, room){
             return api.patchRoom(room).then( data => {
                 commit('set_room', data) 
@@ -98,6 +120,11 @@ let store = new Vuex.Store({
         add_floor({ commit }, floorName){
             return api.addFloor(floorName).then( data => {
                 commit('add_floor', data)
+           });
+        },       
+        update_robot({ commit }, robot){
+            return api.patchRobot(robot).then( data => {
+                commit('set_robot', data) 
             });
         },
         

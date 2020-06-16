@@ -28,7 +28,6 @@ export default {
 
 <template>
     <div>
-        <h1>Cleaning Organizer</h1>
         <div class="d-flex flex-row justify-center flex-grow-1">
             <div class="d-flex flex-column flex-grow-1 ma-4 mt-9">
                 <v-menu bottom offset-y>
@@ -45,11 +44,11 @@ export default {
             <div class="d-flex flex-row flex-grow-1">
                 <div class="d-flex flex-column flex-grow-1">
                     <v-btn to="/floors" class="ma-4">robots and rooms</v-btn>
-                    <v-btn to="/floors" class="ma-4">timetables</v-btn>
+                    <v-btn to="/timetables" class="ma-4">timetables</v-btn>
                 </div>
                 <div class="d-flex flex-column flex-grow-1">
-                    <v-btn to="/floors" class="ma-4">templates</v-btn>
-                    <v-btn to="/floors" class="ma-4">statistics</v-btn>
+                    <v-btn to="/templates" class="ma-4">templates</v-btn>
+                    <v-btn to="/statistics" class="ma-4">statistics</v-btn>
                 </div>
             </div>
         </div>
