@@ -146,7 +146,7 @@
 
             save() {
                 let date = this.selectedEvent.origin
-                date.name = this.selectedElement.name
+                date.name = this.selectedEvent.name
                 date.room = this.changedEvent.room
                 date.robot = this.changedEvent.robot
 
