@@ -47,6 +47,9 @@ let store = new Vuex.Store({
         set_robot(state, data){
             state.robot = data;
         },
+        add_floor(state, data){
+            state.floorList.push(data);
+        },
     },
     
     actions: {
@@ -114,6 +117,11 @@ let store = new Vuex.Store({
             });
         },
 
+        add_floor({ commit }, floorName){
+            return api.addFloor(floorName).then( data => {
+                commit('add_floor', data)
+           });
+        },       
         update_robot({ commit }, robot){
             return api.patchRobot(robot).then( data => {
                 commit('set_robot', data)

@@ -114,6 +114,14 @@ export class ApiMock{
         }
     }
 
+    addFloor(floorName){
+        let newFloor = {
+            id: this.data.rooms.length,
+            name: floorName
+        };
+        return this.apiCall(newFloor);
+    }
+  
     patchRobot(robot){
         // PATCH /robots/:id
         let oldRobot = findById(this.data.robots, robot.id);
@@ -124,7 +132,6 @@ export class ApiMock{
             return this.apiCall(newRobot);
         }
     }
-
 }
 
 export class Api{
