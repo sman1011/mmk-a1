@@ -35,7 +35,6 @@
 
 <template>
     <div>
-        <h2>Stockwerk {{$store.state.floor.name}}</h2>
         <v-row>
             <v-col lg="5">
                 <h4>Rooms in this Floor:</h4>

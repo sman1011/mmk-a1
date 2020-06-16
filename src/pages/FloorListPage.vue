@@ -37,7 +37,6 @@
 
 <template>
     <v-container>
-        <h2>Stockwerke {{floorNameEdit}}</h2>
         <router-link class="text-h6 black--text"
                      v-for="floor in $store.state.floorList"
                      v-bind:key="floor.id"
