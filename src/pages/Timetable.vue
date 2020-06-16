@@ -65,12 +65,7 @@
                         <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"/>
                     </template>
                 </v-calendar>
-                <v-menu
-                        v-model="selectedOpen"
-                        :close-on-content-click="false"
-                        :activator="selectedElement"
-                        offset-x
-                >
+                <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
                     <v-card color="grey lighten-4" min-width="350px" flat>
                         <v-toolbar :color="selectedEvent.color" dark>
                             <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
@@ -84,8 +79,8 @@
                                 <v-form >
                                     <v-text-field v-model="selectedEvent.name" label="Event Name" required/>
                                     <v-select v-bind:items="listRobots(0, 0)" v-model="changedEvent.robot" label="Robot"/>
-                                    <v-select v-bind:items="listRooms(0, 0)" v-model="changedEvent.rooms"  label="Rooms"/>
-                                    <v-btn flat class="success mx-0 mt-3" @click="store">Submit</v-btn>
+                                    <v-select v-bind:items="listRooms(0, 0)" v-model="changedEvent.room"  label="Rooms"/>
+                                    <v-btn class="success mx-0 mt-3" @click="save">Submit</v-btn>
                                 </v-form>
                             </template>
                             <template v-else>
@@ -95,7 +90,6 @@
                         <v-card-actions>
                             <v-spacer/>
                             <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Cancel</v-btn>
-
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -150,8 +144,17 @@
 
         methods: {
 
-            store() {
-                alert('name: ' + this.selectedEvent.name + ' id: ' + this.selectedEvent.remoteId + ' Room: ' + this.changedEvent.room + ' Robot: ' + this.changedEvent.robot)
+            save() {
+                let date = this.selectedEvent.origin
+                date.name = this.selectedElement.name
+                date.room = this.changedEvent.room
+                date.robot = this.changedEvent.robot
+
+                // todo add logic of repeated events
+
+                console.log(date)
+                store.dispatch('update_date', {date})
+                this.fetchData();
             },
 
             viewDay({date}) {
@@ -278,7 +281,7 @@
                                     end: `${d.toISOString().split('T')[0]}T${date.end}`,
                                     color: date.color,
                                     details: details,
-                                    remoteId: date.id,
+                                    origin: date
                                 })
                             }
                             break;
@@ -298,7 +301,8 @@
                                     start: `${d.toISOString().split('T')[0]}T${date.begin}`,
                                     end: `${d.toISOString().split('T')[0]}T${date.end}`,
                                     color: date.color,
-                                    details: details
+                                    details: details,
+                                    origin: date
                                 })
                             }
                             break;
@@ -308,7 +312,8 @@
                                 start: `${date.startDate}T${date.begin}`,
                                 end: `${date.startDate}T${date.end}`,
                                 color: date.color,
-                                details: details
+                                details: details,
+                                origin: date
                             })
                     }
 
@@ -337,16 +342,7 @@
 
                     this.dragTime = mouse - start
                 } else {
-                    let robots = this.listRobots(0, 0);
-                    let rooms = this.listRooms(0, 0);
-
-                    let details = `
-                                     <label>Name of the event is: </label><input id="${this.events.length}-name" value="Event #${this.events.length}"/>
-                                     <br/>
-                                     <label>cleaning robot is: </label><select id="${this.events.length}-robot">${robots}</select>
-                                     <br/>
-                                     <label>cleaning room is: </label><select id="${this.events.length}"-room">${rooms}</select>
-                                 `
+                    let details = `<label>room: </label><br/><label>robot: </label>`
                     this.createStart = this.roundTime(mouse)
                     this.createEvent = {
                         name: `Event #${this.events.length}`,
