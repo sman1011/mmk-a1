@@ -48,12 +48,29 @@ let mockData = {
         {
             id: 0,
             name: "Robie Robot",
-            floor: 2
+            floor: 2,
+            vendor: "iRobot",
+            model: "Roomba 9000",
+            availableModes: [
+                "parquet floor",
+                "carpet floor coarse",
+                "carpet floor fine",
+            ],
+            currentMode: "parquet floor"
         },
         {
             id: 1,
             name: "Määh",
-            floor: 3
+            floor: 3,
+            vendor: "Kärcher",
+            model: "RLM 4000",
+            availableModes: [
+                "lawn low cut",
+                "lawn medium cut",
+                "lawn high cut",
+                "sports field"
+            ],
+            currentMode: "lawn medium cut"
         },
     ]
     
