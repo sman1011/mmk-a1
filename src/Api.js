@@ -120,7 +120,6 @@ export class ApiMock{
         }
     }
 
-<<<<<<< HEAD
     patchRobot(robot){
         // PATCH /robots/:id
         let oldRobot = findById(this.data.robots, robot.id);
@@ -191,8 +190,6 @@ export class ApiMock{
         }));
         return this.apiCall(date)
 
-=======
->>>>>>> 69693e4... rename timetable file
     patchRobot(robot){
         // PATCH /robots/:id
         let oldRobot = findById(this.data.robots, robot.id);
@@ -238,6 +235,26 @@ export class ApiMock{
         return this.apiCall(date)
     }
 
+    postDate(date){
+        // POST /date
+        let id = findNextId(this.data.dates);
+        let newDate = Object.assign(date.date, {id});
+        console.log(this.data.data)
+        this.data.dates.push(newDate);
+        console.log(this.data.dates)
+        return this.apiCall(newDate);
+    }
+
+    putDate(date){
+        // PUT /date
+        let oldDate = findById(this.data.dates, date.date.id);
+        if( oldDate === null ){
+            return this.apiCall({ message: "date not found", code: 404 }, true);
+        }else{
+            let newDate = Object.assign(oldDate, date.date);
+            return this.apiCall(newDate);
+        }
+    }
 }
 
 export class Api{

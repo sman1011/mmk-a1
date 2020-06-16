@@ -170,6 +170,18 @@ let store = new Vuex.Store({
             });
         },
 
+        update_date({ commit }, date){
+            return api.putDate(date).then( data => {
+                commit('set_date', date)
+            });
+        },
+
+        add_new_date({ commit }, robot){
+            return api.postDate(robot).then( data => {
+                commit('set_date', data);
+            });
+        },
+
     }
     
 });
