@@ -44,7 +44,7 @@ export default {
         },
         onClear(){
             this.name = "";
-            this.floor = "";
+            this.floor = this.$store.state.floor.id;
             this.fetchData();
         },
     }
