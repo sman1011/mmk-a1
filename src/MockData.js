@@ -83,7 +83,7 @@ let mockData = {
             floor: 2
         },
         {
-            id: 11,
+            id: 12,
             name: "Garten",
             floor: 3
         }
