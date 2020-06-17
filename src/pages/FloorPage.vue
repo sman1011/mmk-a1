@@ -32,7 +32,7 @@
             fetchData(id) {
                 this.$store.dispatch('load_floor', {floorId: parseInt(this.$route.params.floor_id)});
                 this.$store.dispatch('load_room_list', {floorId: parseInt(this.$route.params.floor_id)});
-                this.$store.dispatch('load_robot_list', {floorId: parseInt(this.$route.params.floor_id)});
+                this.$store.dispatch('load_robot_list_for_floors', {floorId: parseInt(this.$route.params.floor_id)});
             },
 
             onDelete(){
