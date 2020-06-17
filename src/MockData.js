@@ -5,86 +5,86 @@ let mockData = {
     floors: [ 
         {
             id: 0,
-            name: "2. OG"
+            name: "2nd Floor"
         }, 
         {
             id: 1,
-            name: "1. OG"
+            name: "1st Floor"
         }, 
         {
             id: 2,
-            name: "EG"
+            name: "Ground Floor"
         }, 
         {
             id: 3,
-            name: "Garten"
+            name: "Garden"
         }
     ],
 
     rooms: [
         {
             id: 0,
-            name: "Schlafzimmer",
+            name: "Bedroom",
             floor: 1
         },
         {
             id: 1,
-            name: "Kinderzimmer 1",
+            name: "Kids room 1",
             floor: 1
         },
         {
             id: 2,
-            name: "Küche",
+            name: "Kitchen",
             floor: 2
         },
         {
             id: 3,
-            name: "Wohnzimmer",
+            name: "Living room",
             floor: 2
         },
         {
             id: 4,
-            name: "Gästezimmer",
+            name: "Guest room",
             floor: 2
         },
         {
             id: 5,
-            name: "Kinderzimmer 2",
+            name: "Kids room 2",
             floor: 1
         },
         {
             id: 6,
-            name: "Wohnzimmer",
+            name: "Living Room",
             floor: 0
         },
         {
             id: 7,
-            name: "Küche",
+            name: "Kitchen",
             floor: 0
         },
         {
             id: 8,
-            name: "Kinderzimmer",
+            name: "Kids Room",
             floor: 0
         },
         {
             id: 9,
-            name: "Bad",
+            name: "Bathroom",
             floor: 0
         },
         {
             id: 10,
-            name: "Bad",
+            name: "Bathroom",
             floor: 1
         },
         {
             id: 11,
-            name: "Gästebad",
+            name: "Guest bathroom",
             floor: 2
         },
         {
             id: 12,
-            name: "Garten",
+            name: "Garden",
             floor: 3
         },
 	{
@@ -110,7 +110,7 @@ let mockData = {
         },
         {
             id: 1,
-            name: "Määh",
+            name: "Mowww",
             floor: 3,
             vendor: "Kärcher",
             model: "RLM 4000",
@@ -137,9 +137,9 @@ let mockData = {
         },
         {
             id: 3,
-            name: "Rocky Wisch",
+            name: "Rocky Wipe",
             floor: 0,
-            vendor: "Roborock S5 Saugroboter mit Wischfunktion",
+            vendor: "Roborock S5 vacuum robot with wipe function",
             model: "Roborock S5",
             availableModes: [
                 "parquet floor",
@@ -151,9 +151,9 @@ let mockData = {
         },
         {
             id: 4,
-            name: "Braava Wisch",
+            name: "Braava Wipe",
             floor: 2,
-            vendor: "iRobot Wischroboter Braava",
+            vendor: "iRobot Wiping Robot Braava",
             model: "m6138",
             availableModes: [
                 "parquet floor",
@@ -166,7 +166,7 @@ let mockData = {
             id: 5,
             name: "Xi",
             floor: 0,
-            vendor: "roborock Xiaowa E20 Saugroboter",
+            vendor: "roborock Xiaowa E20 vacuum robot",
             model: "Xiaowa E20",
             availableModes: [
                 "parquet floor",
@@ -177,9 +177,9 @@ let mockData = {
         },
         {
             id: 6,
-            name: "Meddie Wisch",
+            name: "Meddie Wipe",
             floor: 1,
-            vendor: "MEDION® Wischroboter MD 18379",
+            vendor: "MEDION® wiping robot MD 18379",
             model: "MD 18379",
             availableModes: [
                 "parquet floor",
