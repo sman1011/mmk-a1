@@ -344,13 +344,31 @@
                 } else {
                     let details = `<label>room: </label><br/><label>robot: </label>`
                     this.createStart = this.roundTime(mouse)
-                    this.createEvent = {
+                    let dd = new Date(this.createStart)
+                    let hours = dd.getHours()
+                    hours = hours<10? `0${hours}` : hours;
+                    let minutes = dd.getMinutes()
+                    minutes = minutes<10? `0${minutes}` : minutes
+                    let date = {
                         name: `Event #${this.events.length}`,
                         color: this.rndElement(this.colors),
+                        startDate: dd.toISOString().split('T')[0],
+                        begin: `${hours}:${minutes}`,
+                        end: `${hours}:${minutes}`,
+                    }
+
+                    console.log(date)
+                    store.dispatch('add_new_date',{date}).then(()=>{
+                        date.id = store.state.date.id;
+                    })
+                    this.createEvent = {
+                        name: date.name,
+                        color: date.color,
                         start: this.createStart,
                         end: this.createStart,
-                        timed: true,
                         details: details,
+                        origin: date,
+                        timed: true
                     }
 
                     this.events.push(this.createEvent)
