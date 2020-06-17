@@ -18,6 +18,9 @@ import NewRoomPage from './pages/NewRoomPage.vue';
 import NewRobotPage from './pages/NewRobotPage.vue';
 import NewFloorPage from './pages/NewFloorPage.vue';
 import Timetable from "./pages/Timetable.vue";
+import StatisticsPage from './pages/StatisticsPage.vue';
+
+>>>>>>> master
 
 const vuetify = new Vuetify({
     icons: {
@@ -39,7 +42,8 @@ const routes = [
     { path: '/robots/:robot_id',    component: RobotPage },
 
     { path: '/timetables',           component: Timetable },
-];
+    { path: '/statistics',          component: StatisticsPage },
+]
 
 const router = new VueRouter({
   routes
