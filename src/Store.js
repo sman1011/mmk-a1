@@ -120,6 +120,30 @@ let store = new Vuex.Store({
             });
         },
 
+        update_floor({ commit }, floor){
+            return api.patchFloor(floor).then( data => {
+                commit('set_floor', data)
+            });
+        },
+
+        delete_robot({ commit }, robot){
+            return api.deleteRobot(robot).then( data => {
+                commit('set_robot_list', data)
+            });
+        },
+
+        delete_room({ commit }, room){
+            return api.deleteRoom(room).then( data => {
+                commit('set_room_list', data)
+            });
+        },
+
+        delete_floor({ commit }, floor){
+            return api.deleteFloor(floor).then( data => {
+                commit('set_floor_list', data)
+            });
+        },
+
     }
     
 });

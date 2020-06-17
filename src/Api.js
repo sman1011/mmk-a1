@@ -130,6 +130,32 @@ export class ApiMock{
             return this.apiCall(newRobot);
         }
     }
+
+    patchFloor(floor){
+        // PATCH /floors/:id
+        let oldFloor = findById(this.data.floors, floor.id);
+        if( oldFloor === null ){
+            return this.apiCall({ message: "floor not found", code: 404 }, true);
+        }else{
+            let newFloor = Object.assign(oldFloor, floor);
+            return this.apiCall(newFloor);
+        }
+    }
+
+    deleteRobot(robot){
+        this.data.robots =  this.data.robots.filter( x => x.id !== robot.id );
+        return this.apiCall(this.data.robots);
+    }
+
+    deleteRoom(room){
+        this.data.rooms =  this.data.rooms.filter( x => x.id !== room.id );
+        return this.apiCall(this.data.rooms);
+    }
+
+    deleteFloor(floor){
+        this.data.floors =  this.data.floors.filter( x => x.id !== floor.id );
+        return this.apiCall(this.data.floors);
+    }
 }
 
 export class Api{
