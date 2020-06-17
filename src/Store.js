@@ -92,6 +92,12 @@ let store = new Vuex.Store({
             });
         },
 
+        load_full_robot_list({ commit }){
+            return api.getFullRobotList().then( data => {
+                commit('set_robot_list', data) 
+            });
+        },
+
         load_robot_list({ commit }, { floorId }){
             return api.getRobotList(floorId).then( data => {
                 commit('set_robot_list', data) 
@@ -150,13 +156,7 @@ let store = new Vuex.Store({
             return api.deleteFloor(floor).then( data => {
                 commit('set_floor_list', data)
 	    })
-	}
-=======
-                commit('set_robot', data) 
-            });
-        },
-        
->>>>>>> 83f2f76... updated API for robot edit
+	},
 
         load_date_list({ commit }) {
             return api.getDateList().then(data => {

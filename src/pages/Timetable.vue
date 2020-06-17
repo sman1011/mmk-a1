@@ -179,7 +179,7 @@
 
             fetchData() {
                 store.dispatch('load_date_list');
-                store.dispatch('load_robot_list');
+                store.dispatch('load_full_robot_list');
                 store.dispatch('load_full_room_list')
             },
 

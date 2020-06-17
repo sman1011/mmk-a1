@@ -88,7 +88,7 @@ export class ApiMock{
     }
 
     getRobotList(floorId){
-        // GET /robots
+        // GET /robots/:floorId
         let robots=[];
         if (floorId || floorId===0){
             robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
@@ -96,6 +96,24 @@ export class ApiMock{
             robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
 
         }
+        return this.apiCall(robots);
+    }
+
+    getRobotList(floorId){
+        // GET /floor/robot/:floorId
+        let robots=[];
+        if (floorId || floorId===0){
+            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
+        } else{
+            robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+
+        }
+        return this.apiCall(robots);
+    }
+
+    getFullRobotList(floorId){
+        // GET /robot/
+        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
         return this.apiCall(robots);
     }
 
@@ -189,6 +207,7 @@ export class ApiMock{
             color: d.color,
         }));
         return this.apiCall(date)
+    }
 
     patchRobot(robot){
         // PATCH /robots/:id
