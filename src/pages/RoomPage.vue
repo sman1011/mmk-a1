@@ -1,7 +1,6 @@
 <script>
 
-import { mdiPencil } from '@mdi/js'
-import { mdiCalendar } from '@mdi/js'
+import { mdiPencil, mdiCalendar, mdiDelete } from '@mdi/js'
 
 export default {
     name: "RoomPage",
@@ -17,6 +16,7 @@ export default {
             edit: false,
             mdiPencil,
             mdiCalendar,
+            mdiDelete
         }; 
     },
     
@@ -50,7 +50,13 @@ export default {
                 this.$store.dispatch('load_floor_list');
             }
         },
-        
+
+        onDelete(){
+            this.$store.dispatch('delete_room', this.$store.state.room).then( () => {
+                this.$router.go(-1);
+            });
+        },
+
         onSave(){
             let room = {
                 id: this.$store.state.room.id,
@@ -79,6 +85,19 @@ export default {
             <v-toolbar dense >
                 <v-toolbar-title>Room {{this.$store.state.room.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                icon
+                                v-on:click="onDelete()"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon>{{mdiDelete}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Delete room</span>
+                </v-tooltip>
 
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
