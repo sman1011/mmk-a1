@@ -34,8 +34,8 @@
 </script>
 
 <template>
-    <div>
-        <v-row>
+    <v-container>
+    <v-row>
             <v-col lg="5">
                 <h4>Rooms in this Floor:</h4>
                 <router-link class="text-h6 black--text"
@@ -100,7 +100,7 @@
                 </v-fab-transition>
             </v-col>
         </v-row>
-    </div>
+    </v-container>
 </template>
 
 <style>
