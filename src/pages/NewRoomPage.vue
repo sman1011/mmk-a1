@@ -39,12 +39,12 @@ export default {
                 floor: this.floor,
             };
             this.$store.dispatch('add_new_room', room).then( () => {
-                this.$router.push(`/rooms/${this.$store.state.room.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){
             this.name = "";
-            this.floor = "";
+            this.floor = this.$store.state.floor.id;
             this.fetchData();
         },
     }
@@ -72,6 +72,7 @@ export default {
                     </v-select>
                     
                     <v-btn color="success" v-on:click="onSave">Add Room</v-btn>
+                    <v-btn color="error" v-on:click="$router.go(-1)">Cancel</v-btn>
                     <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
                     
                 </v-form>

@@ -30,7 +30,7 @@ export default {
                 name: this.name,
             };
             this.$store.dispatch('add_new_floor', floor).then( () => {
-                this.$router.push(`/floors/${this.$store.state.floor.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){
@@ -54,6 +54,7 @@ export default {
                     ></v-text-field>
                     
                     <v-btn color="success" v-on:click="onSave">Add Floor</v-btn>
+                    <v-btn color="error" v-on:click="$router.go(-1)">Cancel</v-btn>
                     <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
                     
                 </v-form>

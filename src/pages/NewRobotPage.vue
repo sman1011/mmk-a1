@@ -38,12 +38,12 @@ export default {
                 floor: this.floor,
             };
             this.$store.dispatch('add_new_robot', robot).then( () => {
-                this.$router.push(`/robots/${this.$store.state.robot.id}`);
+                this.$router.go(-1);
             });
         },
         onClear(){
             this.name = "";
-            this.floor = "";
+            this.floor = this.$store.state.floor.id;
             this.fetchData();
         },
     }
@@ -71,6 +71,7 @@ export default {
                     </v-select>
                     
                     <v-btn color="success" v-on:click="onSave">Add Robot</v-btn>
+                    <v-btn color="error" v-on:click="$router.go(-1)">Cancel</v-btn>
                     <v-btn text v-bind:outlined="true" v-on:click="onClear" >Reset Form</v-btn>
                     
                 </v-form>
