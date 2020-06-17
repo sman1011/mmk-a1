@@ -10,7 +10,8 @@ export default {
     data(){ 
         return {
             name: "",
-        }; 
+            snackbar: false
+        };
     },
     
     computed:{
@@ -26,12 +27,16 @@ export default {
     
     methods:{
         onSave(){
-            let floor = {
-                name: this.name,
-            };
-            this.$store.dispatch('add_new_floor', floor).then( () => {
-                this.$router.go(-1);
-            });
+            if(this.name) {
+                let floor = {
+                    name: this.name,
+                };
+                this.$store.dispatch('add_new_floor', floor).then(() => {
+                    this.$router.go(-1);
+                });
+            } else{
+                this.snackbar = true;
+            }
         },
         onClear(){
             this.name = "";
@@ -61,6 +66,11 @@ export default {
                 
             </v-col>
         </v-row>
+        <v-snackbar
+                v-model="snackbar"
+        >
+            <span>Please enter a valid name.</span>
+        </v-snackbar>
     </v-container>
 </template>
 
