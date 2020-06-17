@@ -152,7 +152,6 @@
 
                 // todo add logic of repeated events
 
-                console.log(date)
                 store.dispatch('update_date', {date})
                 this.fetchData();
             },
@@ -273,12 +272,13 @@
 
                             for (let i = 0; i <= sDays; i++) {
                                 let d = new Date();
-                                d.setDate(min.getDate() + i); //TODO fix timezone
+                                d.setDate(min.getDate() + i); /*TODO fix timezone*/
 
                                 events.push({
                                     name: date.name,
-                                    start: `${d.toISOString().split('T')[0]}T${date.begin}`,
-                                    end: `${d.toISOString().split('T')[0]}T${date.end}`,
+                                    start: new Date(`${d.toISOString().split('T')[0]}T${date.begin}`).getTime(),
+                                    end: new Date(`${d.toISOString().split('T')[0]}T${date.end}`).getTime(),
+				    timed: true,
                                     color: date.color,
                                     details: details,
                                     origin: date
@@ -298,8 +298,9 @@
 
                                 events.push({
                                     name: date.name,
-                                    start: `${d.toISOString().split('T')[0]}T${date.begin}`,
-                                    end: `${d.toISOString().split('T')[0]}T${date.end}`,
+                                    start: new Date(`${d.toISOString().split('T')[0]}T${date.begin}`).getTime(),
+                                    end: new Date(`${d.toISOString().split('T')[0]}T${date.end}`).getTime(),
+				    timed: true,
                                     color: date.color,
                                     details: details,
                                     origin: date
@@ -309,10 +310,11 @@
                         default:
                             events.push({
                                 name: date.name,
-                                start: `${date.startDate}T${date.begin}`,
-                                end: `${date.startDate}T${date.end}`,
+                                start: new Date(`${date.startDate}T${date.begin}`).getTime(),
+                                end: new Date(`${date.startDate}T${date.end}`).getTime(),
                                 color: date.color,
                                 details: details,
+				timed: true,
                                 origin: date
                             })
                     }
@@ -357,7 +359,6 @@
                         end: `${hours}:${minutes}`,
                     }
 
-                    console.log(date)
                     store.dispatch('add_new_date',{date}).then(()=>{
                         date.id = store.state.date.id;
                     })
@@ -381,6 +382,14 @@
                 this.extendOriginal = event.end
             },
 
+	    convertToTime(date) {
+	    	let hours = date.getHours()
+		let minutes = date.getMinutes()
+                hours = hours<10? `0${hours}` : hours;
+                minutes = minutes<10? `0${minutes}` : minutes;
+		return `${hours}:${minutes}`
+	    },
+
             mouseMove(tms) {
                 const mouse = this.toTime(tms)
 
@@ -394,6 +403,13 @@
 
                     this.dragEvent.start = newStart
                     this.dragEvent.end = newEnd
+		    let date = this.dragEvent.origin
+		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
+		    date.end = this.convertToTime(new Date(newEnd))
+
+                    store.dispatch('update_date', {date})
+                    this.fetchData();
+
                 } else if (this.createEvent && this.createStart !== null) {
                     const mouseRounded = this.roundTime(mouse, false)
                     const min = Math.min(mouseRounded, this.createStart)
@@ -401,6 +417,12 @@
 
                     this.createEvent.start = min
                     this.createEvent.end = max
+		    let date = this.createEvent.origin
+		    date.begin = this.convertToTime(new Date(this.createEvent.start))
+		    date.end = this.convertToTime(new Date(this.createEvent.end))
+
+                    store.dispatch('update_date', {date})
+                    this.fetchData();
                 }
             },
 
