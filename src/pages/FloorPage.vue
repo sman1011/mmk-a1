@@ -62,7 +62,7 @@
 </script>
 
 <template>
-    <div>
+    <v-container>
         <v-row>
             <v-toolbar dense>
                 <v-toolbar-title>Room {{this.$store.state.floor.name}}</v-toolbar-title>
@@ -194,7 +194,7 @@
                 </v-col>
             </template>
         </v-row>
-    </div>
+    </v-container>
 </template>
 
 <style>
