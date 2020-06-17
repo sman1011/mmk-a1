@@ -1,7 +1,6 @@
 <script>
 
-import { mdiPencil } from '@mdi/js'
-import { mdiCalendar } from '@mdi/js'
+import { mdiPencil, mdiCalendar, mdiDelete } from '@mdi/js'
 
 import FloorMap from '../components/FloorMap.vue';
 
@@ -20,6 +19,7 @@ export default {
             mode: "",
             mdiPencil,
             mdiCalendar,
+            mdiDelete,
         }; 
     },
     
@@ -62,6 +62,11 @@ export default {
                 this.edit = false;
             });
         },
+        onDelete(){
+            this.$store.dispatch('delete_robot', this.$store.state.robot).then( () => {
+                this.$router.go(-1);
+            });
+        },
         onClear(){
             this.name = this.$store.state.robot.name;
             this.floor = this.$store.state.robot.floor;
@@ -81,6 +86,19 @@ export default {
             <v-toolbar dense >
                 <v-toolbar-title>Robot {{this.$store.state.robot.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                icon
+                                v-on:click="onDelete()"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon>{{mdiDelete}}</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Delete robot</span>
+                </v-tooltip>
 
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
