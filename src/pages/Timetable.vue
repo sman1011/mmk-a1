@@ -79,7 +79,8 @@
                                     <v-text-field v-model="changedEvent.name" label="Event Name" required/>
                                     <v-select v-bind:items="robotSelectItems" v-model="changedEvent.robot" label="Robot"/>
                                     <v-select v-bind:items="roomSelectItems" v-model="changedEvent.room"  label="Room"/>
-                                    <v-btn class="success mx-0 mt-3" @click="save">Submit</v-btn>
+                                    <v-btn class="success mx-0 mt-3" @click="save()">Save</v-btn>
+                                    <v-btn class="error mt-3" @click="selectedEdit = false">Cancel</v-btn>
                                 </v-form>
                             </template>
                             <template v-else>
@@ -88,9 +89,9 @@
                                 <label>robot: </label><router-link :to="'/robots/'+selectedEventRobot.id">{{selectedEventRobot.name}}</router-link>
                             </template>
                         </v-card-text>
-                        <v-card-actions>
+                        <v-card-actions v-if="! selectedEdit">
                             <v-spacer/>
-                            <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Cancel</v-btn>
+                            <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Close</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -202,8 +203,10 @@
 
                 // todo add logic of repeated events
 
-                store.dispatch('update_date', {date})
-                this.fetchData();
+                store.dispatch('update_date', {date}).then( () => {
+                    this.selectedEdit = false;
+                    this.fetchData();
+                });
             },
 
             viewDay({date}) {
