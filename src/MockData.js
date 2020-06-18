@@ -39,7 +39,7 @@ let mockData = {
         },
         {
             id: 3,
-            name: "Living room",
+            name: "Living room downstairs",
             floor: 2
         },
         {
@@ -54,7 +54,7 @@ let mockData = {
         },
         {
             id: 6,
-            name: "Living Room",
+            name: "Living Room upstairs",
             floor: 0
         },
         {
@@ -64,17 +64,17 @@ let mockData = {
         },
         {
             id: 8,
-            name: "Kids Room",
+            name: "Kids room 3",
             floor: 0
         },
         {
             id: 9,
-            name: "Bathroom",
+            name: "Bathroom 2nd floor",
             floor: 0
         },
         {
             id: 10,
-            name: "Bathroom",
+            name: "Bathroom 1st floor",
             floor: 1
         },
         {
@@ -84,14 +84,9 @@ let mockData = {
         },
         {
             id: 12,
-            name: "Garden",
+            name: "Lawn",
             floor: 3
-        },
-	{
-	    id: 13,
-            name: "lawn",
-            floor: 3
-        },
+        }
     ],
     
     robots: [
@@ -210,7 +205,7 @@ let mockData = {
 	        endDate: "2020-11-01",
 	        repeat: "weekly",
             robot: 1,
-            room: 4,
+            room: 12,
             begin: "10:00",
             end: "11:00",
             color: "green",

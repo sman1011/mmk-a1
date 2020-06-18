@@ -77,8 +77,8 @@
                             <template v-if="selectedEdit">
                                 <v-form >
                                     <v-text-field v-model="changedEvent.name" label="Event Name" required/>
-                                    <v-select v-bind:items="robotSelectItems" v-model="changedEvent.robot" label="Robot"/>
                                     <v-select v-bind:items="roomSelectItems" v-model="changedEvent.room"  label="Room"/>
+                                    <v-select v-bind:items="robotSelectItems" v-model="changedEvent.robot" label="Robot"/>
                                     <v-btn class="success mx-0 mt-3" @click="save()">Save</v-btn>
                                     <v-btn class="error mt-3" @click="selectedEdit = false">Cancel</v-btn>
                                 </v-form>
@@ -159,7 +159,7 @@
                 return event.name;
             },
             selectedEventRobot(){
-                let robot = { name: "", id: -1 };
+                let robot = { name: "", id: -1, floor: -1 };
                 let event = this.selectedEvent.origin;
                 if( event === undefined ){
                     return robot;
@@ -168,7 +168,7 @@
                 return robots.length > 0 ? robots[0] : robot;
             },
             selectedEventRoom(){
-                let room = { name: "", id: -1 };
+                let room = { name: "", id: -1, floor: -1 };
                 let event = this.selectedEvent.origin;
                 if( event === undefined ){
                     return room;
@@ -178,7 +178,18 @@
             },
             
             robotSelectItems(){
-                return this.$store.state.robotList.map( r => ({ text: r.name, value: r.id }) );
+                let rooms = [];
+                if( this.changedEvent.room >= 0 ){
+                    rooms = this.$store.state.roomList.filter( r => (r.id === this.changedEvent.room) );
+                }
+                
+                let robots = [];
+                if( rooms.length == 0 ){
+                    robots = this.$store.state.robotList;
+                }else{
+                    robots = this.$store.state.robotList.filter( r => (r.floor === rooms[0].floor) );
+                }
+                return robots.map( r => ({ text: r.name, value: r.id }) );
             },
             roomSelectItems(){
                 return this.$store.state.roomList.map( r => ({ text: r.name, value: r.id }) );
