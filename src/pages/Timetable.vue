@@ -53,7 +53,6 @@
                         @click:more="viewDay"
                         @click:date="viewDay"
                         @change="updateRange"
-                        @load="updateRange"
                         @mousedown:event="startDrag"
                         @mousedown:time="startTime"
                         @mousemove:time="mouseMove"
@@ -68,28 +67,31 @@
                 <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" offset-x>
                     <v-card color="grey lighten-4" min-width="350px" flat>
                         <v-toolbar :color="selectedEvent.color" dark>
-                            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                            <v-toolbar-title>{{selectedEventName}}</v-toolbar-title>
                             <v-spacer/>
-                            <v-btn icon @click="selectedEdit = !selectedEdit">
+                            <v-btn icon @click="toggleEventEdit">
                                 <v-icon>{{mdiPencil}}</v-icon>
                             </v-btn>
                         </v-toolbar>
                         <v-card-text>
                             <template v-if="selectedEdit">
                                 <v-form >
-                                    <v-text-field v-model="selectedEvent.name" label="Event Name" required/>
-                                    <v-select v-bind:items="listRobots(0, 0)" v-model="changedEvent.robot" label="Robot"/>
-                                    <v-select v-bind:items="listRooms(0, 0)" v-model="changedEvent.room"  label="Rooms"/>
-                                    <v-btn class="success mx-0 mt-3" @click="save">Submit</v-btn>
+                                    <v-text-field v-model="changedEvent.name" label="Event Name" required/>
+                                    <v-select v-bind:items="robotSelectItems" v-model="changedEvent.robot" label="Robot"/>
+                                    <v-select v-bind:items="roomSelectItems" v-model="changedEvent.room"  label="Room"/>
+                                    <v-btn class="success mx-0 mt-3" @click="save()">Save</v-btn>
+                                    <v-btn class="error mt-3" @click="selectedEdit = false">Cancel</v-btn>
                                 </v-form>
                             </template>
                             <template v-else>
-                                <span v-html="selectedEvent.details"></span>
+                                <label>room: </label><router-link :to="'/rooms/'+selectedEventRoom.id">{{selectedEventRoom.name}}</router-link>
+                                <br/>
+                                <label>robot: </label><router-link :to="'/robots/'+selectedEventRobot.id">{{selectedEventRobot.name}}</router-link>
                             </template>
                         </v-card-text>
-                        <v-card-actions>
+                        <v-card-actions v-if="! selectedEdit">
                             <v-spacer/>
-                            <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Cancel</v-btn>
+                            <v-btn text color="secondary" @click="selectedOpen = false; selectedEdit = false">Close</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -106,7 +108,14 @@
 
     export default {
         watch: {
-            '$route': 'fetchData'
+            '$route': 'fetchData',
+            '$store.state.dateList': {
+                deep: true,
+                handler: function(newData, oldData){
+                    this.updateEvents();
+                }
+            },
+
         },
 
         data: () => ({
@@ -133,27 +142,71 @@
             mdiPencil,
             mdiMenuDown,
             changedEvent: {
+                name: "",
                 robot: -1,
                 room: -1,
-            }
+            },
+            displayRange: { min: null, max: null, days: null }
         }),
+        
+        computed: {
+            selectedEventName(){
+                let name = "";
+                let event = this.selectedEvent.origin;
+                if( event === undefined ){
+                    return this.selectedEvent.name !== undefined ? this.selectedEvent.name : name;
+                }
+                return event.name;
+            },
+            selectedEventRobot(){
+                let robot = { name: "", id: -1 };
+                let event = this.selectedEvent.origin;
+                if( event === undefined ){
+                    return robot;
+                }
+                let robots = this.$store.state.robotList.filter( r => (r.id === event.robot) );
+                return robots.length > 0 ? robots[0] : robot;
+            },
+            selectedEventRoom(){
+                let room = { name: "", id: -1 };
+                let event = this.selectedEvent.origin;
+                if( event === undefined ){
+                    return room;
+                }
+                let rooms = this.$store.state.roomList.filter( r => (r.id === event.room) );
+                return rooms.length > 0 ? rooms[0] : room;
+            },
+            
+            robotSelectItems(){
+                return this.$store.state.robotList.map( r => ({ text: r.name, value: r.id }) );
+            },
+            roomSelectItems(){
+                return this.$store.state.roomList.map( r => ({ text: r.name, value: r.id }) );
+            },
+            
+        },
 
         mounted() {
             this.$refs.calendar.checkChange()
+        },
+        created () {
+            this.fetchData()
         },
 
         methods: {
 
             save() {
                 let date = this.selectedEvent.origin
-                date.name = this.selectedEvent.name
+                date.name = this.changedEvent.name
                 date.room = this.changedEvent.room
                 date.robot = this.changedEvent.robot
 
                 // todo add logic of repeated events
 
-                store.dispatch('update_date', {date})
-                this.fetchData();
+                store.dispatch('update_date', {date}).then( () => {
+                    this.selectedEdit = false;
+                    this.fetchData();
+                });
             },
 
             viewDay({date}) {
@@ -199,42 +252,30 @@
 
                 nativeEvent.stopPropagation()
             },
-
-            listRooms(floorId, roomId) {
-                let rooms = []
-                store.state.roomList.forEach((room) => {
-                    /*if(room.floor !== floorId) {
-                        return;
-                    }*/
-                    if (room.id === roomId) {
-                        rooms.unshift({value: room.id, text: room.name})
-                    } else {
-                        rooms.push({value: room.id, text: room.name})
-                    }
-                })
-                return rooms;
-            },
-
-            listRobots(floorId, robotId) {
-                let robots = []
-                store.state.robotList.forEach((robot) => {
-                    /*if(robot.floor !== floorId) {
-                        return
-                    }*/
-                    if (robot.id === robotId) {
-                        robots.unshift({value: robot.id, text: robot.name})
-                    } else {
-                        robots.push({value: robot.id, text: robot.name})
-                    }
-                })
-                return robots;
+            
+            toggleEventEdit(){
+                this.selectedEdit = ! this.selectedEdit;
+                if( this.selectedEdit && this.selectedEvent.origin !== undefined ){
+                    this.changedEvent.name = this.selectedEvent.origin.name;
+                    this.changedEvent.robot = this.selectedEvent.origin.robot;
+                    this.changedEvent.room = this.selectedEvent.origin.room;
+                }
             },
 
             updateRange({start, end}) {
-                this.fetchData()
-                const min = new Date(`${start.date}T00:00:00`)
-                const max = new Date(`${end.date}T23:59:59`)
-                const days = (max.getTime() - min.getTime()) / 86400000;
+                this.displayRange.min = new Date(`${start.date}T00:00:00`)
+                this.displayRange.max = new Date(`${end.date}T23:59:59`)
+                this.displayRange.days = (this.displayRange.max.getTime() - this.displayRange.min.getTime()) / 86400000;
+                this.updateEvents();
+            },
+
+            updateEvents() {
+                if( this.displayRange.min === null || this.displayRange.max === null || this.displayRange.days === null ){
+                    return;
+                }
+                const min = this.displayRange.min;
+                const max = this.displayRange.max;
+                const days = this.displayRange.days;
 
                 let events = [];
 
@@ -252,14 +293,6 @@
                         }
                     }
 
-
-                    let robot = this.listRobots(date.robot)[0];
-                    let room = this.listRooms(date.room)[0];
-                    let details = `
-                                     <label>room: </label><a href="#/rooms/${room.value}">${room.text}</a>
-                                     <br/>
-                                     <label>robot: </label><a href="#/robots/${robot.value}">${robot.text}</a>
-                                 `
                     switch (date.repeat) {
                         case "daily":
                             let sDays = days;
@@ -280,7 +313,6 @@
                                     end: new Date(`${d.toISOString().split('T')[0]}T${date.end}`).getTime(),
 				    timed: true,
                                     color: date.color,
-                                    details: details,
                                     origin: date
                                 })
                             }
@@ -302,7 +334,6 @@
                                     end: new Date(`${d.toISOString().split('T')[0]}T${date.end}`).getTime(),
 				    timed: true,
                                     color: date.color,
-                                    details: details,
                                     origin: date
                                 })
                             }
@@ -313,7 +344,6 @@
                                 start: new Date(`${date.startDate}T${date.begin}`).getTime(),
                                 end: new Date(`${date.startDate}T${date.end}`).getTime(),
                                 color: date.color,
-                                details: details,
 				timed: true,
                                 origin: date
                             })
@@ -344,7 +374,6 @@
 
                     this.dragTime = mouse - start
                 } else {
-                    let details = `<label>room: </label><br/><label>robot: </label>`
                     this.createStart = this.roundTime(mouse)
                     let dd = new Date(this.createStart)
                     let hours = dd.getHours()
@@ -367,7 +396,6 @@
                         color: date.color,
                         start: this.createStart,
                         end: this.createStart,
-                        details: details,
                         origin: date,
                         timed: true
                     }
@@ -403,13 +431,6 @@
 
                     this.dragEvent.start = newStart
                     this.dragEvent.end = newEnd
-		    let date = this.dragEvent.origin
-		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
-		    date.end = this.convertToTime(new Date(newEnd))
-
-                    store.dispatch('update_date', {date})
-                    this.fetchData();
-
                 } else if (this.createEvent && this.createStart !== null) {
                     const mouseRounded = this.roundTime(mouse, false)
                     const min = Math.min(mouseRounded, this.createStart)
@@ -417,21 +438,38 @@
 
                     this.createEvent.start = min
                     this.createEvent.end = max
-		    let date = this.createEvent.origin
-		    date.begin = this.convertToTime(new Date(this.createEvent.start))
-		    date.end = this.convertToTime(new Date(this.createEvent.end))
-
-                    store.dispatch('update_date', {date})
-                    this.fetchData();
                 }
             },
 
             endDrag() {
-                this.dragTime = null
-                this.dragEvent = null
-                this.createEvent = null
-                this.createStart = null
-                this.extendOriginal = null
+                let date = null;
+
+                if (this.dragEvent && this.dragTime !== null) {
+                    date = this.dragEvent.origin
+        		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
+        		    date.end = this.convertToTime(new Date(this.dragEvent.end))
+                } else if (this.createEvent && this.createStart !== null) {
+                    date = this.createEvent.origin
+        		    date.begin = this.convertToTime(new Date(this.createEvent.start))
+        		    date.end = this.convertToTime(new Date(this.createEvent.end))
+                    
+                }else{
+                    this.dragTime = null
+                    this.dragEvent = null
+                    this.createEvent = null
+                    this.createStart = null
+                    this.extendOriginal = null
+                    return;
+                }
+                
+                store.dispatch('update_date', {date}).then( () => {
+                    this.dragTime = null
+                    this.dragEvent = null
+                    this.createEvent = null
+                    this.createStart = null
+                    this.extendOriginal = null
+                    this.fetchData();
+                })
             },
 
             cancelDrag() {
@@ -450,6 +488,7 @@
                 this.createStart = null
                 this.dragTime = null
                 this.dragEvent = null
+                this.fetchData();
             },
 
             roundTime(time, down = true) {
