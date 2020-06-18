@@ -20,8 +20,6 @@ import NewFloorPage from './pages/NewFloorPage.vue';
 import Timetable from "./pages/Timetable.vue";
 import StatisticsPage from './pages/StatisticsPage.vue';
 
->>>>>>> master
-
 const vuetify = new Vuetify({
     icons: {
         iconfont: 'mdiSvg',
