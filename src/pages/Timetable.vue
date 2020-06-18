@@ -457,10 +457,12 @@
 
                 if (this.dragEvent && this.dragTime !== null) {
                     date = this.dragEvent.origin
+		    	    date.startDate = new Date(this.dragEvent).toISOString.split('T')[0]
         		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
         		    date.end = this.convertToTime(new Date(this.dragEvent.end))
                 } else if (this.createEvent && this.createStart !== null) {
                     date = this.createEvent.origin
+		    	    date.startDate = new Date(this.dragEvent).toISOString.split('T')[0]
         		    date.begin = this.convertToTime(new Date(this.createEvent.start))
         		    date.end = this.convertToTime(new Date(this.createEvent.end))
                     
