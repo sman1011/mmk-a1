@@ -20,6 +20,7 @@ export default {
             mdiPencil,
             mdiCalendar,
             mdiDelete,
+            mdiPencil,
         }; 
     },
     
@@ -46,6 +47,8 @@ export default {
             
             this.$store.dispatch('load_robot', { robotId }).then( () => {
                 this.onClear();
+                this.name = this.$store.state.robot.name;
+                this.floor = this.$store.state.robot.floor;
             });
             
             this.$store.dispatch('load_floor_list');
@@ -219,7 +222,6 @@ export default {
                 <div>Current floor map of this robot</div>
                 <floor-map class="robot-page__map" ></floor-map>
             </v-col>
-
         </v-row>
         
     </v-container>

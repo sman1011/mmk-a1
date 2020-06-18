@@ -88,7 +88,7 @@ export class ApiMock{
     }
 
     getRobotList(floorId){
-        // GET /robots
+        // GET /robots/:floorId
         let robots=[];
         if (floorId || floorId===0){
             robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
@@ -96,6 +96,24 @@ export class ApiMock{
             robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
 
         }
+        return this.apiCall(robots);
+    }
+
+    getRobotList(floorId){
+        // GET /floor/robot/:floorId
+        let robots=[];
+        if (floorId || floorId===0){
+            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
+        } else{
+            robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+
+        }
+        return this.apiCall(robots);
+    }
+
+    getFullRobotList(floorId){
+        // GET /robot/
+        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
         return this.apiCall(robots);
     }
 
@@ -155,6 +173,106 @@ export class ApiMock{
     deleteFloor(floor){
         this.data.floors =  this.data.floors.filter( x => x.id !== floor.id );
         return this.apiCall(this.data.floors);
+    }
+
+    getDateList(){
+        // GET /date
+        let dates = this.data.dates.map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(dates)
+    }
+
+    getDate(dateId){
+        // GET /date/:dateId
+        let date = this.data.dates.filter(d => d.id === dateId).map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(date)
+    }
+
+    patchRobot(robot){
+        // PATCH /robots/:id
+        let oldRobot = findById(this.data.robots, robot.id);
+        if( oldRobot === null ){
+            return this.apiCall({ message: "robot not found", code: 404 }, true);
+        }else{
+            let newRobot = Object.assign(oldRobot, robot);
+            return this.apiCall(newRobot);
+        }
+    }
+
+    getDateList(){
+        // GET /date
+        let dates = this.data.dates.map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(dates)
+    }
+
+    getDate(dateId){
+        // GET /date/:dateId
+        let date = this.data.dates.filter(d => d.id === dateId).map(d => ({
+            id: d.id,
+            name: d.name,
+            startDate: d.startDate,
+            endDate: d.endDate,
+            end: d.end,
+            room: d.room,
+            robot: d.robot,
+            begin: d.begin,
+            repeat: d.repeat,
+            color: d.color,
+        }));
+        return this.apiCall(date)
+    }
+
+    postDate(date){
+        // POST /date
+        let id = findNextId(this.data.dates);
+        let newDate = Object.assign(date.date, {id});
+        console.log(this.data.data)
+        this.data.dates.push(newDate);
+        console.log(this.data.dates)
+        return this.apiCall(newDate);
+    }
+
+    putDate(date){
+        // PUT /date
+        let oldDate = findById(this.data.dates, date.date.id);
+        if( oldDate === null ){
+            return this.apiCall({ message: "date not found", code: 404 }, true);
+        }else{
+            let newDate = Object.assign(oldDate, date.date);
+            return this.apiCall(newDate);
+        }
     }
 }
 

@@ -14,10 +14,12 @@ let store = new Vuex.Store({
         floorList: [],
         roomList: [],
         robotList:[],
+        dateList: [],
         
         floor: {},
         room: {},
         robot: {},
+        date: {},
     },
     
     getters: {
@@ -37,6 +39,9 @@ let store = new Vuex.Store({
         set_robot_list(state, data){
             state.robotList = data;
         },
+        set_date_list(state, data){
+            state.dateList = data;
+        },
         
         set_floor(state, data){
             state.floor = data;
@@ -47,6 +52,9 @@ let store = new Vuex.Store({
         set_robot(state, data){
             state.robot = data;
         },
+        set_date(state, data){
+            state.date = data;
+        }
     },
     
     actions: {
@@ -81,6 +89,12 @@ let store = new Vuex.Store({
         load_full_room_list({ commit }){
             return api.getFullRoomList().then( data => {
                 commit('set_room_list', data)
+            });
+        },
+
+        load_full_robot_list({ commit }){
+            return api.getFullRobotList().then( data => {
+                commit('set_robot_list', data) 
             });
         },
 
@@ -141,6 +155,30 @@ let store = new Vuex.Store({
         delete_floor({ commit }, floor){
             return api.deleteFloor(floor).then( data => {
                 commit('set_floor_list', data)
+	    })
+	},
+
+        load_date_list({ commit }) {
+            return api.getDateList().then(data => {
+                commit('set_date_list', data)
+            });
+        },
+
+        load_date({ commit }, { dateId }) {
+            return api.getDate(dateId).then(data => {
+                commit('set_date', data)
+            });
+        },
+
+        update_date({ commit }, date){
+            return api.putDate(date).then( data => {
+                commit('set_date', date)
+            });
+        },
+
+        add_new_date({ commit }, robot){
+            return api.postDate(robot).then( data => {
+                commit('set_date', data);
             });
         },
 
