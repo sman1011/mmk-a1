@@ -120,7 +120,7 @@
 
         data: () => ({
             focus: '',
-            type: 'month',
+            type: 'week',
             typeToLabel: {
                 month: 'Month',
                 week: 'Week',
