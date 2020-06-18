@@ -53,7 +53,6 @@
                         @click:more="viewDay"
                         @click:date="viewDay"
                         @change="updateRange"
-                        @load="updateRange"
                         @mousedown:event="startDrag"
                         @mousedown:time="startTime"
                         @mousemove:time="mouseMove"
@@ -106,7 +105,14 @@
 
     export default {
         watch: {
-            '$route': 'fetchData'
+            '$route': 'fetchData',
+            '$store.state.dateList': {
+                deep: true,
+                handler: function(newData, oldData){
+                    this.updateEvents();
+                }
+            },
+
         },
 
         data: () => ({
@@ -135,11 +141,15 @@
             changedEvent: {
                 robot: -1,
                 room: -1,
-            }
+            },
+            displayRange: { min: null, max: null, days: null }
         }),
 
         mounted() {
             this.$refs.calendar.checkChange()
+        },
+        created () {
+            this.fetchData()
         },
 
         methods: {
@@ -231,10 +241,19 @@
             },
 
             updateRange({start, end}) {
-                this.fetchData()
-                const min = new Date(`${start.date}T00:00:00`)
-                const max = new Date(`${end.date}T23:59:59`)
-                const days = (max.getTime() - min.getTime()) / 86400000;
+                this.displayRange.min = new Date(`${start.date}T00:00:00`)
+                this.displayRange.max = new Date(`${end.date}T23:59:59`)
+                this.displayRange.days = (this.displayRange.max.getTime() - this.displayRange.min.getTime()) / 86400000;
+                this.updateEvents();
+            },
+
+            updateEvents() {
+                if( this.displayRange.min === null || this.displayRange.max === null || this.displayRange.days === null ){
+                    return;
+                }
+                const min = this.displayRange.min;
+                const max = this.displayRange.max;
+                const days = this.displayRange.days;
 
                 let events = [];
 
@@ -254,7 +273,9 @@
 
 
                     let robot = this.listRobots(date.robot)[0];
+                    robot = robot !== undefined ? robot : { value: "", text: "" };
                     let room = this.listRooms(date.room)[0];
+                    room = room !== undefined ? room : { value: "", text: "" };
                     let details = `
                                      <label>room: </label><a href="#/rooms/${room.value}">${room.text}</a>
                                      <br/>
@@ -403,13 +424,6 @@
 
                     this.dragEvent.start = newStart
                     this.dragEvent.end = newEnd
-		    let date = this.dragEvent.origin
-		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
-		    date.end = this.convertToTime(new Date(newEnd))
-
-                    store.dispatch('update_date', {date})
-                    this.fetchData();
-
                 } else if (this.createEvent && this.createStart !== null) {
                     const mouseRounded = this.roundTime(mouse, false)
                     const min = Math.min(mouseRounded, this.createStart)
@@ -417,21 +431,38 @@
 
                     this.createEvent.start = min
                     this.createEvent.end = max
-		    let date = this.createEvent.origin
-		    date.begin = this.convertToTime(new Date(this.createEvent.start))
-		    date.end = this.convertToTime(new Date(this.createEvent.end))
-
-                    store.dispatch('update_date', {date})
-                    this.fetchData();
                 }
             },
 
             endDrag() {
-                this.dragTime = null
-                this.dragEvent = null
-                this.createEvent = null
-                this.createStart = null
-                this.extendOriginal = null
+                let date = null;
+
+                if (this.dragEvent && this.dragTime !== null) {
+                    date = this.dragEvent.origin
+        		    date.begin = this.convertToTime(new Date(this.dragEvent.start))
+        		    date.end = this.convertToTime(new Date(this.dragEvent.end))
+                } else if (this.createEvent && this.createStart !== null) {
+                    date = this.createEvent.origin
+        		    date.begin = this.convertToTime(new Date(this.createEvent.start))
+        		    date.end = this.convertToTime(new Date(this.createEvent.end))
+                    
+                }else{
+                    this.dragTime = null
+                    this.dragEvent = null
+                    this.createEvent = null
+                    this.createStart = null
+                    this.extendOriginal = null
+                    return;
+                }
+                
+                store.dispatch('update_date', {date}).then( () => {
+                    this.dragTime = null
+                    this.dragEvent = null
+                    this.createEvent = null
+                    this.createStart = null
+                    this.extendOriginal = null
+                    this.fetchData();
+                })
             },
 
             cancelDrag() {
@@ -450,6 +481,7 @@
                 this.createStart = null
                 this.dragTime = null
                 this.dragEvent = null
+                this.fetchData();
             },
 
             roundTime(time, down = true) {
