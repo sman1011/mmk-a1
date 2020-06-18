@@ -57,7 +57,7 @@ export class ApiMock{
 
     getFullRoomList(){
         // GET /rooms
-        let rooms = this.data.rooms.map( (f) => ({ id: f.id, name: f.name }) );
+        let rooms = this.data.rooms.map( (f) => ({ id: f.id, name: f.name, floor: f.floor }) );
         return this.apiCall(rooms);
     }
 
@@ -73,7 +73,7 @@ export class ApiMock{
 
     getRoomList(floorId){
         // GET /loor/:floorId/rooms
-        let rooms = this.data.rooms.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
+        let rooms = this.data.rooms.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name, floor: r.floor }) );
         return this.apiCall(rooms);
     }
 
@@ -91,21 +91,9 @@ export class ApiMock{
         // GET /robots/:floorId
         let robots=[];
         if (floorId || floorId===0){
-            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
+            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name, floor: r.floor }) );
         } else{
-            robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
-
-        }
-        return this.apiCall(robots);
-    }
-
-    getRobotList(floorId){
-        // GET /floor/robot/:floorId
-        let robots=[];
-        if (floorId || floorId===0){
-            robots = this.data.robots.filter( r => (r.floor === floorId) ).map( r => ({ id: r.id, name: r.name }) );
-        } else{
-            robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+            robots = this.data.robots.map( r => ({ id: r.id, name: r.name, floor: r.floor }) );
 
         }
         return this.apiCall(robots);
@@ -113,7 +101,7 @@ export class ApiMock{
 
     getFullRobotList(floorId){
         // GET /robot/
-        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name }) );
+        let robots = this.data.robots.map( r => ({ id: r.id, name: r.name, floor: r.floor }) );
         return this.apiCall(robots);
     }
 
