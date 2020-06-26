@@ -1,10 +1,10 @@
 # Development
 
-Install nodejs 12. [Nodesource](https://github.com/nodesource/distributions) provides third party  packaged for some popular Linux distributions.
+Install nodejs 12. For Linux [Nodesource](https://github.com/nodesource/distributions) provides third party packages.
 
 Install [yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable)
 
-Install the dev dependencies:
+Change into the project root directory an install the dev dependencies:
 
 ```sh
 yarn
